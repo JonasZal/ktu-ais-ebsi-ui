@@ -1,0 +1,10 @@
+{
+  "name": "waltid-web-wallet",
+  "short_name": "waltid-web-wallet",
+  "description": "KTU Academic information system designed to work with walt.id backend",
+  "icons": [],
+  "start_url": "/?standalone=true",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "lang": "en"
+}
