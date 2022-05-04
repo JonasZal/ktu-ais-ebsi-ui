@@ -44,7 +44,7 @@ export default {
   },
   async asyncData({ $axios, route }) {
     const modules = await $axios.get(
-      "http://localhost:8080/ktu-ais-api/getModules/list"
+      "/ktu-ais-api/getModules/list"
     );
 
     

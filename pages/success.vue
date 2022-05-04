@@ -506,7 +506,7 @@ export default {
       if (this.password.length > 0) {
         try {
           const registerResponse = await this.$axios.post(
-            "http://localhost:8080/ktu-ais-api/onboardStudent/request",
+            "/ktu-ais-api/onboardStudent/request",
             "userId=" + this.email + "&userPassword=" + this.password
           );
           console.log(registerResponse);

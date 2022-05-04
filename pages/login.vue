@@ -69,7 +69,8 @@ export default {
   },
   
    async asyncData({ $axios }) {
-    const wallets = await $axios.$get("http://localhost:8080/verifier-api/wallets/list");
+    //const wallets = await $axios.$get("http://localhost:8080/verifier-api/wallets/list");
+	const wallets = await $axios.$get("/verifier-api/wallets/list");
     console.log(wallets);
     return { wallets };
   },
