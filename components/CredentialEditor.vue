@@ -1,60 +1,59 @@
 <template>
     <div>
       <!-- VerifiableId -->
-      <div v-if="issuable.type == 'VerifiableId'">
-        <div class="row _forms mb-3">
+      <div class="mainf" v-if="issuable.type == 'VerifiableId'">
+        <div class="mainf">
           <div class="col-11">
-            <div class="right-inner-addon input-container">
-              <i class="bi bi-card-text"></i>
-              <input :disabled="!enableEditor" type="text" :class="enableEditor ? 'form-control border-primary' : 'form-control'" :placeholder="$t('CREDENTIAL.FIRST_NAME')" aria-label="First name" v-model="issuable.credentialData.credentialSubject.firstName">
+            <div class="">
+            <p>First name: {{issuable.credentialData.credentialSubject.firstName}}</p>
+              <!--<input :disabled="!enableEditor" type="text" :class="enableEditor ? 'form-control border-primary' : 'form-control'" :placeholder="$t('CREDENTIAL.FIRST_NAME')" aria-label="First name" v-model="issuable.credentialData.credentialSubject.firstName">-->
             </div>
           </div>
         </div>
-        <div class="row _forms mb-3">
+        <div class="mb-3">
           <div class="col-11">
-            <div class="right-inner-addon input-container">
-              <i class="bi bi-card-text"></i>
-              <input :disabled="!enableEditor" type="text" :class="enableEditor ? 'form-control border-primary' : 'form-control'" :placeholder="$t('CREDENTIAL.LAST_NAME')" aria-label="Family name" v-model="issuable.credentialData.credentialSubject.familyName">
+            <div class="">
+            <p>Family name: {{issuable.credentialData.credentialSubject.familyName}}</p>
             </div>
           </div>
         </div>
-        <div class="row _forms mb-3">
+        <div class="mb-3">
           <div class="col-11">
-            <div class="right-inner-addon input-container">
-              <i class="bi bi-people"></i>
-              <input :disabled="!enableEditor" type="text" :class="enableEditor ? 'form-control border-primary' : 'form-control'" :placeholder="$t('CREDENTIAL.GENDER')" aria-label="Gender" v-model="issuable.credentialData.credentialSubject.gender">
+            <div class="">
+              <p>Gender: {{issuable.credentialData.credentialSubject.gender}}</p>
+             <!-- <input :disabled="!enableEditor" type="text" :class="enableEditor ? 'form-control border-primary' : 'form-control'" :placeholder="$t('CREDENTIAL.GENDER')" aria-label="Gender" v-model="issuable.credentialData.credentialSubject.gender">-->
             </div>
           </div>
         </div>
-        <div class="row _forms mb-3">
+        <div class="mb-3">
           <div class="col-11">
-            <div class="right-inner-addon input-container">
-              <i class="bi bi-calendar2-event"></i>
-              <input :disabled="!enableEditor" type="text" :class="enableEditor ? 'form-control border-primary' : 'form-control'" :placeholder="$t('CREDENTIAL.DATE_OF_BIRTH')" aria-label="DateOfBirth" v-model="issuable.credentialData.credentialSubject.dateOfBirth">
+            <div class="">
+             <p>Date of birth: {{issuable.credentialData.credentialSubject.dateOfBirth}}</p>
+             <!-- <input :disabled="!enableEditor" type="text" :class="enableEditor ? 'form-control border-primary' : 'form-control'" :placeholder="$t('CREDENTIAL.DATE_OF_BIRTH')" aria-label="DateOfBirth" v-model="issuable.credentialData.credentialSubject.dateOfBirth">-->
             </div>
           </div>
         </div>
-        <div class="row _forms mb-3">
+        <!--<div class="mb-3">
           <div class="col-11">
-            <div class="right-inner-addon input-container">
-              <i class="bi bi-map"></i>
+            <div class="">
+              <p>Gender: {{issuable.credentialData.issuable.credentialData.credentialSubject.nationality}}</p>
               <input :disabled="!enableEditor" type="text" :class="enableEditor ? 'form-control border-primary' : 'form-control'" :placeholder="$t('CREDENTIAL.NATIONALITY')" aria-label="Nationality" v-model="issuable.credentialData.credentialSubject.nationality">
             </div>
           </div>
-        </div>
-        <div class="row _forms mb-3">
+        </div>-->
+        <div class="mb-3">
           <div class="col-11">
-            <div class="right-inner-addon input-container">
-              <i class="bi bi-geo-alt"></i>
-              <input :disabled="!enableEditor" type="text" :class="enableEditor ? 'form-control border-primary' : 'form-control'" :placeholder="$t('CREDENTIAL.PLACE_OF_BIRTH')" aria-label="PlaceOfBirth" v-model="issuable.credentialData.credentialSubject.placeOfBirth">
+            <div class="">
+              <p>Place of birth: {{issuable.credentialData.credentialSubject.placeOfBirth}}</p>
+             <!-- <input :disabled="!enableEditor" type="text" :class="enableEditor ? 'form-control border-primary' : 'form-control'" :placeholder="$t('CREDENTIAL.PLACE_OF_BIRTH')" aria-label="PlaceOfBirth" v-model="issuable.credentialData.credentialSubject.placeOfBirth">-->
             </div>
           </div>
         </div>
         <div class="row _forms mb-3">
           <div class="col-11">
-            <div class="right-inner-addon input-container">
-              <i class="bi bi-credit-card-2-front"></i>
-              <input :disabled="!enableEditor" type="text" :class="enableEditor ? 'form-control border-primary' : 'form-control'" :placeholder="$t('CREDENTIAL.PERSONAL_IDENTIFIER')" aria-label="PersonalIdentifier" v-model="issuable.credentialData.credentialSubject.personalIdentifier">
+            <div class="">
+             <p>Personal identifier: {{issuable.credentialData.credentialSubject.personalIdentifier}}</p>
+              <!--<input :disabled="!enableEditor" type="text" :class="enableEditor ? 'form-control border-primary' : 'form-control'" :placeholder="$t('CREDENTIAL.PERSONAL_IDENTIFIER')" aria-label="PersonalIdentifier" v-model="issuable.credentialData.credentialSubject.personalIdentifier">-->
             </div>
           </div>
         </div>
@@ -83,6 +82,18 @@
             <div class="right-inner-addon input-container">
               <i class="bi bi-calendar2-event"></i>
               <input :disabled="!enableEditor" type="text" :class="enableEditor ? 'form-control border-primary' : 'form-control'" :placeholder="$t('CREDENTIAL.DATE_OF_BIRTH')" aria-label="DateOfBirth" v-model="issuable.credentialData.credentialSubject.dateOfBirth">
+            </div>
+          </div>
+        </div>
+      </div>
+
+       <!-- Europass -->
+      <div v-if="issuable.type == 'Europass'">
+        <div class="row _forms mb-3">
+          <div class="col-11">
+            <div class="right-inner-addon input-container">
+              <i class="bi bi-card-text"></i>
+              <input :disabled="!enableEditor" type="text" :class="enableEditor ? 'form-control border-primary' : 'form-control'" :placeholder="$t('CREDENTIAL.STUDENT_ID')" v-model="issuable.credentialData.credentialSubject.identifier.value">
             </div>
           </div>
         </div>
@@ -313,4 +324,10 @@ export default {
 
 <style scoped>
 
+.col-11
+{
+  font-weight: normal;
+  font-size: 25px;
+  text-align: left;
+}
 </style>

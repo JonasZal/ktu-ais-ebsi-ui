@@ -1,111 +1,40 @@
 <template>
   <div>
-    <!-- <<header>
-      <div id="navbarHeader" class="collapse bg-dark">
-        <div class="container">
-          <div class="row">
-            <div class="col-sm-8 col-md-7 py-4">
-              <h4 class="text-white">
-                About walt.id
-              </h4>
-              <p class="text-muted">
-                <b>walt.id</b> is a European company that develops Self-
-                Sovereign Identity (SSI) solutions for governments and
-                businesses across industries.
-                We offer an easy and fast way to adopt SSI - particularly
-                Europe’s new decentralized digital identity ecosystem -
-                based on robust open source products. To ensure client’s
-                success our industry-leading experts provide holistic
-                services ranging from conception and project planning
-                over the implementation of proof-of-concepts and
-                production system to enterprise support and managed
-                cloud services..
-              </p>
-            </div>
-            <div class="col-sm-4 offset-md-1 py-4">
-              <h4 class="text-white">
-                Coordinates
-              </h4>
-              <ul class="list-unstyled">
-                <li><a href="https://walt.id" class="text-white">web: https://walt.id</a></li>
-                <li><a href="https://docs.walt.id" class="text-white">docs: https://docs.walt.id</a></li>
-                <li><a href="https://github.com/walt-id" class="text-white">src: https://github.com/walt-id</a></li>
-                <li><a href="mailto:office@walt.id" class="text-white">mail: office@walt.id</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="navbar navbar-dark bg-dark shadow-sm">
-        <div class="container">
-          <a href="#" class="navbar-brand d-flex align-items-center"> -->
-
-            <!--        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-bookmark-check" viewBox="0 0 16 16">-->
-            <!--          <path fill-rule="evenodd" d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>-->
-            <!--          <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>-->
-            <!--        </svg>-->
-            <!-- <img class="me-3" src="/waltid-white-logo.png" alt="" width="50px">
-            <strong>walt.id</strong>
-          </a>
-          <ul class="nav navbar-nav navbar-right">
-            <li>
-              <a href="#" v-for="locale in availableLocales" :key="locale.code" @click.prevent.stop="$i18n.setLocale(locale.code)">
-                <img :src="locale.flag" width="20px" height="15px" :alt="locale.iso" class="me-2 border border-white" />
-              </a>
-              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon" />
-              </button>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </header> -->
-
+   
+  
     <KTUheader></KTUheader>
 
-    <main>
+    <main class="container">
       <section class="py-5 text-center container mainf">
         <div class="row py-lg-5">
           
           <div class="col-lg-6 col-md-8 mx-auto">
             <h1 class="fw-normal">
-              {{$t('CLAIM_CREDENTIALS')}}
+              Issue student ID:
             </h1>
-            <p class="lead text-muted fw-normal mb-4">
-              {{$t('SELECT_CREDENTIALS_MSG')}}
-            </p>
-              <form>
-                <div class="d-flex flex-column align-items-md-center align-items-sm-start text-start">
+              <form class="">
+                
                   <div class="form-check col-md-9 col-sm-12 mb-3" v-for="issuable in issuables.credentials" :key="issuable.type">
-                    <input class="form-check-input me-4" type="checkbox" :id="'issuable-' + issuable.type" :name="'issuable-' + issuable.type" :value="issuable.type" v-model="checkedCredentials">
-                    <label class="form-check-label">{{/*issuable.type*/}}{{$t(issuable.type)}} |</label>
-                    <button type="button" data-bs-toggle="modal" :data-bs-target="'#credentilModal'+issuable.type" class="text-primary _view-btn mb-2"><i class="bi bi-box-arrow-up-right p-1"></i></button>
+                    <div v-if="issuable.type === 'VerifiableId'">
+                    
+                   <!-- <h2 class="mainf">{{$t(issuable.type)}} </h2>-->
+                    <!--<button type="button" data-bs-toggle="modal" :data-bs-target="'#credentilModal'+issuable.type" class="text-primary _view-btn mb-2"><i class="bi bi-box-arrow-up-right p-1"></i></button>-->
                     <!--Credendtial Modal -->
-                    <div class="modal fade" :id="'credentilModal' + issuable.type" tabindex="-1" :aria-labelledby="'credentilModal'+issuable.type" aria-hidden="true">
-                      <div class="modal-dialog">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">{{$t('EDIT_CREDENTIAL')}}</h5>
-                            <div class="col _edit-btn d-flex flex-column align-items-right justify-content-right text-end">
-                              <a @click="enableCredentialEditor ? disableInput() : enableInput()" href="#enable" :class="enableCredentialEditor ? 'p-0 text-success fst-italic' : 'p-0 text-primary fst-italic' "><i :class="enableCredentialEditor ? 'bi bi-check-square' : 'bi bi-pencil-square'"></i></a>
-                            </div>
-                          </div>
-                          <credential-editor :issuable="issuable" :enableEditor="enableCredentialEditor" class="modal-body" />
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-primary buttonktu" data-bs-dismiss="modal" @click="reset">{{$t('CLOSE')}}</button>
-                          </div>
-                        </div>
-                      </div>
+                    <!--<div class="" :id="'credentilModal' + issuable.type" tabindex="-1" :aria-labelledby="'credentilModal'+issuable.type">-->
+                          <credential-editor :issuable="issuable" :enableEditor="enableCredentialEditor" class="modal-body" />                     
+                    <!--</div>-->
                     </div>
                   </div>
-                </div>
+            
               </form>
-              <button @click="goToWallet(wallets[0].id)" class="btn btn-primary py-2 px-5 _cbtn buttonktu" :disabled="this.checkedCredentials.length > 0 ? false : true"><img v-if="btnLoading" src="loader.gif" width="20px"/><span v-else>{{$t('CONFIRM')}}</span></button>
+              <button @click="goToWallet(wallets[0].id)" class="btn btn-primary py-2 px-5 _cbtn buttonktu" ><img v-if="btnLoading" src="loader.gif" width="20px"/><span v-else>{{$t('CONFIRM')}}</span></button>
           </div>
         </div>
       </section>
     </main>
+    <div>
     <KTUfooter></KTUfooter>
+    </div>
   </div>
 </template>
 
@@ -138,7 +67,7 @@ export default {
     const issuables = await $axios.$get('/issuer-api/credentials/listIssuables', { params: query })
     console.log("cia issuables:")
     console.log(issuables)
-    console.log(issuables.credentials)
+    console.log(issuables.credentials[0].type)
 
     return { wallets, issuables }
   },
@@ -253,7 +182,7 @@ export default {
       //   credentials: this.checkedCredentials.filter(c => this.checkedCredentials.findIndex(cc => cc == c.type) >= 0)
       // }
       let selectedIssuables = {
-        credentials: this.issuables.credentials.filter(c => this.checkedCredentials.findIndex(cc => cc == c.type) >= 0)
+        credentials: this.issuables.credentials.filter(c => 'VerifiableId' == c.type)
       }
     
       console.log("credentials:")
@@ -277,159 +206,17 @@ export default {
 <style scoped>
 @import url('https://fonts.cdnfonts.com/css/pf-dintext-pro-medium');
 
-.dropdown-menu{
-  margin: 0px;
-    padding: 0px;
-    border: 0px;
-    background-color: rgb(243, 242, 238);
-    
-    box-shadow: 0px 0px 0px 0px;
-    border-radius: 0px;
+h1{
+  margin-bottom: 30px;
 }
-.downmenu{
-  
-    
-    padding: 10px 15px 10px 15px;
-    display: block;
-    color: black;
-    background-color: transparent;
-    transition: all 0.25s ease-in-out;
-}
-.footerli{
-     width: 100%;
-    padding: 0 20px;
-    font-family: "PF DinText Pro Medium", sans-serif;
-    color: black;
-    font-size: 16px;
-    line-height: 35px;
-    display: block;
-    background-color: #f3f2ee;
-    
-}
-.footerli:hover{
-  background-color: rgb(252, 251, 248);
-}
-#buttonfooter1{
-  margin-left: 100px;
-      background-color: #f3f2ee;
-    border-radius: 3px;
-    border-color: #f3f2ee;
-    color: black;
-    font-size: 16px;
-    font-weight: 500;
-    padding: 10px 20px;
-    text-decoration: none;
-    display: block;
-    font-family: "PF DinText Pro Medium", sans-serif;
-    width: 205px;
-}
-#buttonfooter2{
-      margin-left: 100px;
-      background-color: #f3f2ee;
-    border-radius: 3px;
-    border-color: #f3f2ee;
-    color: black;
-    font-size: 16px;
-    font-weight: 500;
-    padding: 10px 20px;
-    text-decoration: none;
-    display: block;
-    font-family: "PF DinText Pro Medium", sans-serif;
-    width: 100%;
-}
-#icons{
-    position: relative;
-    min-height: 1px;
-    padding-right: 15px;
-    padding-left: 15px;
-}
-footer{
-    padding: 0;
-    padding-bottom: 20px;
-    width: 100%;
-    float: left;
-    display: block;
-}
-.container{
-  width: 1170px;
-  padding-right: 15px;
-  padding-left: 15px;
-  margin-right: auto;
-  margin-left: auto;
-}
-footer{
-
-  display: block;
-
-  position: fixed;
-
-  right: 0;
-
-  left: 0;
-
-  /*z-index: 1030;*/
-
-  bottom: 0;
-
-}
-
-
-footer .social-icons img {
-    width: 24px;
-}
-footer .social-icons{
-    position: absolute;
-    top: 30px;
-    right: 0;
-    transform: translate(80%, 0);
-     z-index: 20;
-}
-.social-icons{
-  display: block;
-  height: auto;
-  max-width: 100%;
-  border: 0;
-}
-.social-icons:hover{
-  display: block;
-  height: auto;
-  max-width: 100%;
-  border: 0;
-}
-
-.dropdown-menu{
-       background: transparent;
-       border:none;
-}
-.topmenu:hover {
-  background-color: #000000; /* Green */
-  color: white;
-  transition-duration: 0.5s;
-}
-.topmenu{
-  border-radius: 3px;
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
-    border-bottom-right-radius: 3px;
-    border-bottom-left-radius: 3px;
-    margin-top: 1px;
-
-        padding: 10px 15px 10px 15px;
-    display: block;
-    color: black;
-    background: #fff;
-    border: 1px solid;
-        white-space: initial;
-            clear: both;
-    font-weight: normal;
-    line-height: 1.42857143;
+form{
+  height: 400px;
+  width: 600px;
 }
 .mainf{
   font-family: "PF DinText Pro Medium", sans-serif;
   font-weight: normal;
-}
-.labelfon{
-  font-weight: 10;
+  text-align: center;
 }
 .buttonktu:hover, .buttonktu:focus {
   background-color: #000000; /* Green */
@@ -455,130 +242,5 @@ footer .social-icons{
     font-family: "PF DinText Pro Medium";
     
 }
-.lightgreentop{
-      background: #e1f1ec;
-}
-.midhead{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.midhead2{
-  height: 120px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.midhead3{
-  height: 120px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.mainktufont{
-      color: #000101;
-    font-family: "pf_dintext_promedium", sans-serif;
-    font-size: 36px;
-    font-weight: 500;
-    line-height: 24px;
-    margin-bottom: 20px;
-}
-._view-btn{ 
-  background-color: transparent;
-  border: none;
-}
 
-/* label{
-  font-size: 20px;
-  margin-top: -3px;
-  font-weight: 600;
-}
-button._view-btn{
-  background-color: transparent;
-  border: none;
-  padding: 0;
-  margin: 0;
-  font-size: 18px;
-  font-weight: 600;
-}
-.left-inner-addon {
-    position: relative;
-}
-.left-inner-addon input {
-    padding-left: 35px !important;
-}
-.left-inner-addon i {
-    position: absolute;
-    padding: 17px 15px;
-    pointer-events: none;
-}
-.right-inner-addon {
-    position: relative;
-}
-.right-inner-addon input {
-    padding-right: 35px !important;
-}
-.right-inner-addon i {
-    position: absolute;
-    right: 0px;
-    padding: 17px 15px;
-    pointer-events: none;
-}
-.left-and-right-inner-addon {
-    position: relative;
-}
-.left-and-right-inner-addon input {
-    padding-right: 35px !important;
-    padding-left: 35px !important;
-}
-.left-and-right-inner-addon i.right {
-    position: absolute;
-    right: 0px;
-    padding: 17px 15px;
-    pointer-events: none;
-}
-.right-inner-addon-b {
-    position: relative;
-}
-.right-inner-addon-b input {
-    padding-right: 35px !important;
-}
-.right-inner-addon-b i {
-    position: absolute;
-    right: 0px;
-    padding: 17px 15px;
-    pointer-events: none;
-}
-._forms input {
-    width: 100%;
-		padding: 1em !important;
-		margin: 0em !important;
-		box-sizing: border-box;
-}
-._edit-btn button{
-  background-color: transparent;
-  border: none;
-}
-._cbtn{
-  width: 165px;
-  height: 45px
-}
-._cbtn img{
-  margin-top: -3px
-}
-@media only screen and (max-width: 600px) {
-  label{
-  font-size: 14px;
-  margin-top: -3px;
-  font-weight: 600;
-}
-button._view-btn{
-  background-color: transparent;
-  border: none;
-  padding: 0;
-  margin: 0;
-  font-size: 13px;
-  font-weight: 600;
-}
-} */
 </style>

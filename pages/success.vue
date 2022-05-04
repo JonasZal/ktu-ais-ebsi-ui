@@ -510,7 +510,7 @@ export default {
             "userId=" + this.email + "&userPassword=" + this.password
           );
           console.log(registerResponse);
-          this.$router.push('/login?success=true');
+          this.$router.push('http://localhost:8600/login?success=true');
         } catch (e) {
           this.error = e.response.data.message;
         }

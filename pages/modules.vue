@@ -6,7 +6,6 @@
       <section class="text-center container">
         <div class="row py-lg-5">
           <h2>Modules:</h2>
-
           <div
             class="accordion my-2"
             id="accordion1"
@@ -20,6 +19,7 @@
               <i class="bi"></i>
                <b>Module description:</b> {{ data.description}}
             </span>
+         
 
           </div>
         </div>
@@ -43,6 +43,7 @@ export default {
     };
   },
   async asyncData({ $axios, route }) {
+    
     const modules = await $axios.get(
       "/ktu-ais-api/getModules/list"
     );
