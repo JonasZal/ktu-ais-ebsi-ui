@@ -15,7 +15,10 @@
               class="my-4 padding-form"
               @submit.prevent="registerUser"
             >
-            <ErrorMessage :message-content="errorMessage" :is-active="error" />
+              <ErrorMessage
+                :message-content="errorMessage"
+                :is-active="error"
+              />
               <div class="form-floating pad">
                 <input
                   type="email"
@@ -457,7 +460,7 @@ if (window.opener != null) {
   window.close();
 }
 import KTUheader from "../components/KTUheader.vue";
-import ErrorMessage from '@/components/ErrorMessage.vue'
+import ErrorMessage from "@/components/ErrorMessage.vue";
 export default {
   auth: false,
   name: "success.vue",
@@ -468,8 +471,10 @@ export default {
       customResult: "Error",
       password: "",
       email: "",
+      name: "",
+      familyName: "",
       error: false,
-      errorMessage: '',
+      errorMessage: "",
     };
   },
 
@@ -479,7 +484,10 @@ export default {
     let protectedData = {};
     if (route.query.access_token != null) {
       await $axios
-        .get("/verifier-api/auth?access_token=" + route.query.access_token)
+        .get(
+          "/verifier-api/auth?access_token=" +
+            route.query.access_token
+        )
         .then((response) => {
           result = response.data;
 
@@ -507,15 +515,21 @@ export default {
         try {
           const registerResponse = await this.$axios.post(
             "/ktu-ais-api/onboardStudent/request",
-            "userId=" + this.email + "&userPassword=" + this.password
+            "userId=" +
+              this.email +
+              "&userPassword=" +
+              this.password +
+              "&userName=" +
+              this.name +
+              "&userFamilyName=" +
+              this.familyName
           );
           console.log(registerResponse);
-          this.$router.push('http://localhost:8600/login?success=true');
+          this.$router.push("/login?success=true");
         } catch (e) {
           this.error = e.response.data.message;
         }
-      } 
-        else if (this.password.length === 0) {
+      } else if (this.password.length === 0) {
         this.error = true;
         this.errorMessage = "Please fill your password!";
       }
@@ -530,7 +544,7 @@ export default {
     getEmail() {
       let size = Object.keys(this.result.vp_token.verifiableCredential).length;
       if (size > 0) {
-        let name =
+        var name =
           this.result.vp_token.verifiableCredential[0].credentialSubject
             .firstName;
         let surname =
@@ -541,31 +555,26 @@ export default {
       } else {
         this.customResult = "Error";
       }
-      /*try {
-        let size = Object.keys(
-          this.result.vp_token.verifiableCredential
-        ).length;
-        if (size > 0) {
-          let name =
-            this.result.vp_token.verifiableCredential[0].credentialSubject
-              .firstName;
-          let surname =
-            this.result.vp_token.verifiableCredential[0].credentialSubject
-              .familyName;
-          this.customResult =
-            name.toLowerCase() + "." + surname.toLowerCase() + "@ktu.edu";
-        } else {
-          this.customResult = "Error";
-        }
-      } catch (error) 
-      {
-        this.customResult = "Error" + error
-      }*/
+    },
+
+    getNameAndFamilyName() {
+      let size = Object.keys(this.result.vp_token.verifiableCredential).length;
+      if (size > 0) {
+        this.name =
+          this.result.vp_token.verifiableCredential[0].credentialSubject.firstName;
+        this.familyName =
+          this.result.vp_token.verifiableCredential[0].credentialSubject.familyName;
+      } else {
+        this.name = "Jane";
+        this.familyName = "Doe";
+      }
     },
   },
   beforeMount() {
     this.getEmail();
     this.email = this.customResult;
+
+    this.getNameAndFamilyName();
   },
 };
 </script>

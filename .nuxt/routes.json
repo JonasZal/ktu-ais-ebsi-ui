@@ -3,35 +3,30 @@
     "name": "issuer",
     "path": "/issuer",
     "component": "C:\\\\UAIS\\\\pages\\\\issuer.vue",
-    "chunkName": "pages/issuer",
-    "_name": "_63384872"
+    "chunkName": "pages/issuer"
   },
   {
     "name": "login",
     "path": "/login",
     "component": "C:\\\\UAIS\\\\pages\\\\login.vue",
-    "chunkName": "pages/login",
-    "_name": "_37a6b480"
+    "chunkName": "pages/login"
   },
   {
     "name": "modules",
     "path": "/modules",
     "component": "C:\\\\UAIS\\\\pages\\\\modules.vue",
-    "chunkName": "pages/modules",
-    "_name": "_36038b1e"
+    "chunkName": "pages/modules"
   },
   {
     "name": "success",
     "path": "/success",
     "component": "C:\\\\UAIS\\\\pages\\\\success.vue",
-    "chunkName": "pages/success",
-    "_name": "_3097059a"
+    "chunkName": "pages/success"
   },
   {
     "name": "index",
     "path": "/",
     "component": "C:\\\\UAIS\\\\pages\\\\index.vue",
-    "chunkName": "pages/index",
-    "_name": "_1a8502a9"
+    "chunkName": "pages/index"
   }
 ]
