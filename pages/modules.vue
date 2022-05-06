@@ -5,22 +5,68 @@
     <main>
       <section class="text-center container">
         <div class="row py-lg-5">
-          <h2>Modules:</h2>
+          <div class="row dashboard">
+            <div class="col-2">
+              <a href="/" class="buttonktu12" type="button" aria-expanded="false"
+                >Dashboard
+              </a>
+            </div>
+            <div class="col-10">
+              <h2 class="mainf">Available modules:</h2>
+            </div>
+          </div>
           <div
-            class="accordion my-2"
+            class="my-2 mod"
             id="accordion1"
             v-for="data in modules.data"
             v-bind:key="data.id"
           >
-            <span class="spanspc">
-              <i class="bi"></i>
-              <b>Module code:</b> {{ data.code}}
-            <br/>
-              <i class="bi"></i>
-               <b>Module description:</b> {{ data.description}}
-            </span>
-         
-
+            <div class="row modulis">
+              <div class="col-md-7">
+                <span class="spanspc">
+                  <i class="bi"></i>
+                  <b>Module code:</b> {{ data.code }}
+                  <br />
+                  <i class="bi"></i>
+                  <b>Module description:</b> {{ data.description }}
+                  <br />
+                  <i class="bi"></i>
+                  <b>Status:</b> {{ data.status }}
+                </span>
+              </div>
+              <div class="col-md-2 button">
+                <button
+                  v-if="
+                    (data.status === 'Open') &
+                    (data.code !== enrolledMod.data[0])
+                  "
+                  @click="enrollData(data.code)"
+                  type="button"
+                  class="buttonktu"
+                >
+                  Enroll
+                </button>
+                <button
+                  v-else-if="
+                    (data.status === 'Closed') &
+                    (data.code !== enrolledMod.data[0])
+                  "
+                  type="button"
+                  class="buttonktu"
+                  disabled
+                >
+                  Enroll
+                </button>
+                <button
+                  v-else-if="data.code === enrolledMod.data[0]"
+                  type="button"
+                  class="buttonktu"
+                  disabled
+                >
+                  Enrolled
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -39,32 +85,125 @@ export default {
   data() {
     return {
       modules: "",
-      route:"",
+      route: "",
+      enrolledMod: "",
     };
   },
   async asyncData({ $axios, route }) {
-    
-    const modules = await $axios.get(
-      "/ktu-ais-api/getModules/list"
-    );
+    let modules = await $axios.get("/ktu-ais-api/modules/list");
 
-    
+    let enrolledMod = await $axios.get("/ktu-ais-api/modules/listUserCourses");
+
     console.log(modules);
     console.log(route);
+    console.log(enrolledMod.data[0]);
+    console.log(modules.data[0].code);
 
-    return { modules };
+    return { modules, enrolledMod };
+  },
+  methods: {
+    async enrollData(code) {
+      let c = await this.$axios.post(
+        "/ktu-ais-api/modules/enrol",
+        "courseId=" + code
+      );
+      console.log(code);
+       this.$router.push("/?success=true");
+
+    },
   },
 };
 </script>>
 
 <style scoped>
 @import url("https://fonts.cdnfonts.com/css/pf-dintext-pro-medium");
-.accordion{
+
+
+.buttonktu12:hover,
+.buttonktu12:focus {
+  background-color: #000000; /* Green */
+  color: white;
+  transition-duration: 0.5s;
+}
+.buttonktu12 {
+  position: relative;
+  background: transparent;
+  float: none !important;
+  margin: 20px;
+  bottom: initial;
+  right: initial;
+  min-width: 90px;
+  min-height: 32px;
+  border-radius: 4px;
+
+  font-size: 16px !important;
+  padding: 8px 20px 8px 19px;
+  border: 2px solid #000101;
+  text-align: center;
+  color: #000101;
+  font-family: "PF DinText Pro Medium";
+}
+
+.mod{
+  text-align: left;
+}
+.container {
+  padding-bottom: 35px;
+}
+.dashboard {
+  padding-bottom: 50px;
+}
+.col-10 {
+  padding-top: 15px;
+  text-align: left;
+}
+h2 {
+  padding-left: 200px;
+}
+form {
+  height: 400px;
+  width: 800px;
+}
+.mainf {
+  font-family: "PF DinText Pro Medium", sans-serif;
+  font-weight: normal;
+}
+.buttonktu:hover,
+.buttonktu:focus {
+  background-color: #000000; /* Green */
+  color: white;
+  transition-duration: 0.5s;
+}
+.buttonktu {
+  position: relative;
+  background: transparent;
+  float: none !important;
+  margin: 20px;
+  bottom: initial;
+  right: initial;
+  min-width: 90px;
+  min-height: 32px;
+  border-radius: 4px;
+
+  font-size: 16px !important;
+  padding: 8px 20px 8px 19px;
+  border: 2px solid #000101;
+  text-align: center;
+  color: #000101;
+  font-family: "PF DinText Pro Medium";
+}
+
+.button {
+  padding-top: 10px;
+}
+.modulis {
+  padding-left: 180px;
+}
+.accordion {
   padding-top: 50px;
 }
-.spanspc
-{
-    padding-bottom: 10px;
+.spanspc {
+  padding-bottom: 10px;
 }
 main {
   padding-bottom: 10px;
@@ -234,21 +373,22 @@ footer {
   box-shadow: none;
   font-family: "PF DinText Pro Medium";
 }
+.buttonktu:disabled {
+  background-color: #cccccc;
+  color: #666666;
+  border: 1px solid #999999;
+}
 .buttonktu {
-  position: relative;
+  position: center;
   background: transparent;
   float: none !important;
 
-  bottom: initial;
-  right: initial;
-  width: 120px;
-  height: 50px;
+  width: 80px;
+  height: 30px;
   border-radius: 4px;
 
-  font-size: 16px !important;
-  padding: 8px 20px 8px 19px;
+  font-size: 14px !important;
   border: 2px solid #000101;
-  text-align: center;
   color: #000101;
   letter-spacing: 0.5px;
   box-shadow: none;
@@ -298,8 +438,8 @@ label {
   color: #000000;
   background-color: #ffffff;
 }
-.accordion{
-    text-align: left;
+.accordion {
+  text-align: left;
 }
 .table1 {
   background: #e1f1ec;

@@ -514,7 +514,7 @@ export default {
       if (this.password.length > 0) {
         try {
           const registerResponse = await this.$axios.post(
-            "/ktu-ais-api/onboardStudent/request",
+            "/ktu-ais-api/student/onboardRequest",
             "userId=" +
               this.email +
               "&userPassword=" +
