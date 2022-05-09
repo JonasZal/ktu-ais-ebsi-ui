@@ -5,7 +5,7 @@
     <main class="_home d-flex justify-content-centr">
       <section class="text-center container">
         <div class="row py-lg-5">
-          <div class="col-lg-4 col-md-6 mx-auto mainf">
+          <div v-if="result.vp_token.verifiableCredential[0].type[2]==='VerifiableId'" class="col-lg-4 col-md-6 mx-auto mainf">
             <h2 class="fw-bold mb-2 pad">Welcome</h2>
 
             <form
@@ -297,6 +297,10 @@
               </span>
             </div>
           </div>
+          <div v-else-if="result.vp_token.verifiableCredential[0].type[2]==='Europass'" class="col-lg-4 col-md-6 mx-auto mainf">
+            <!--<p>{{result.vp_token.verifiableCredential[0]}}</p>-->
+            <p>success</p>
+          </div>
         </div>
       </section>
     </main>
@@ -492,6 +496,7 @@ export default {
           result = response.data;
 
           console.log(response.data);
+          console.log(result.vp_token.verifiableCredential[0].type[2]);
           return $axios.get("/verifier-api/protected", {
             headers: {
               Authorization: "Bearer " + result.auth_token,
@@ -533,6 +538,14 @@ export default {
         this.error = true;
         this.errorMessage = "Please fill your password!";
       }
+    },
+
+    async enrollData(code) {
+
+      /*let c = await this.$axios.post(
+        "/ktu-ais-api/modules/enrol",
+        "courseId=" + code
+      );*/
     },
 
     viewSessionToken() {
@@ -747,6 +760,12 @@ footer {
   letter-spacing: 0.5px;
   box-shadow: none;
   font-family: "PF DinText Pro Medium";
+}
+.buttonktu:hover,
+.buttonktu:focus {
+  background-color: #000000; /* Green */
+  color: white;
+  transition-duration: 0.5s;
 }
 .buttonktu {
   position: relative;

@@ -40,7 +40,7 @@
                     (data.status === 'Open') &
                     (data.code !== enrolledMod.data[0])
                   "
-                  @click="enrollData(data.code)"
+                  @click="enrollData(data.code, wallets, diplomaSchemaUri)"
                   type="button"
                   class="buttonktu"
                 >
@@ -87,9 +87,20 @@ export default {
       modules: "",
       route: "",
       enrolledMod: "",
+       diplomaSchemaUri:
+        "https://raw.githubusercontent.com/walt-id/waltid-ssikit-vclib/master/src/test/resources/schemas/Europass.json",
+        wallets:"",
+        codeID:"",
     };
   },
-  async asyncData({ $axios, route }) {
+   /*async asyncDataVerifier({ $axios, route, codeID }) {
+    
+
+    return { result, protectedData, codeID };
+  },*/
+  
+  async asyncData({ $axios, route, codeID}) {
+
     let modules = await $axios.get("/ktu-ais-api/modules/list");
 
     let enrolledMod = await $axios.get("/ktu-ais-api/modules/listUserCourses");
@@ -97,19 +108,32 @@ export default {
     console.log(modules);
     console.log(route);
     console.log(enrolledMod.data[0]);
-    console.log(modules.data[0].code);
+    console.log(modules.data.length);
 
-    return { modules, enrolledMod };
+    /*if(codeID!=="")
+    {
+      for(let i=0; i<modules.data.lenght; i++)
+      {
+        if(codeID === modules.data[i].code)
+        {
+          modules.data[i].code = codeID;
+        }
+      }
+    }*/
+    console.log(codeID);
+    //console.log(codeID);
+    const wallets = await $axios.$get("/verifier-api/wallets/list");
+    console.log(wallets);
+
+    return {modules, enrolledMod, wallets };
   },
-  methods: {
-    async enrollData(code) {
-      let c = await this.$axios.post(
-        "/ktu-ais-api/modules/enrol",
-        "courseId=" + code
-      );
-      console.log(code);
-       this.$router.push("/?success=true");
 
+  methods: {
+    async enrollData(code, wallets, vidSchemaUri) {
+
+      window.location='/verifier-api/present/?walletId=' +
+                  wallets[0].id +
+                  '&schemaUri=' + vidSchemaUri;
     },
   },
 };
