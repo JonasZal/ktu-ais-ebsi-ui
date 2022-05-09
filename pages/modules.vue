@@ -6,6 +6,7 @@
       <section class="text-center container">
         <div class="row py-lg-5">
           <div class="row dashboard">
+            <p v-if="result !== ''">{{result}}</p>
             <div class="col-2">
               <a href="/" class="buttonktu12" type="button" aria-expanded="false"
                 >Dashboard
@@ -40,7 +41,7 @@
                     (data.status === 'Open') &
                     (data.code !== enrolledMod.data[0])
                   "
-                  @click="enrollData(data.code, wallets, diplomaSchemaUri)"
+                  @click="enrollData(wallets, diplomaSchemaUri)"
                   type="button"
                   class="buttonktu"
                 >
@@ -91,6 +92,7 @@ export default {
         "https://raw.githubusercontent.com/walt-id/waltid-ssikit-vclib/master/src/test/resources/schemas/Europass.json",
         wallets:"",
         codeID:"",
+        result:'',
     };
   },
    /*async asyncDataVerifier({ $axios, route, codeID }) {
@@ -98,8 +100,10 @@ export default {
 
     return { result, protectedData, codeID };
   },*/
+
+ 
   
-  async asyncData({ $axios, route, codeID}) {
+  async asyncData({ $axios, route}) {
 
     let modules = await $axios.get("/ktu-ais-api/modules/list");
 
@@ -120,7 +124,6 @@ export default {
         }
       }
     }*/
-    console.log(codeID);
     //console.log(codeID);
     const wallets = await $axios.$get("/verifier-api/wallets/list");
     console.log(wallets);
@@ -128,12 +131,48 @@ export default {
     return {modules, enrolledMod, wallets };
   },
 
+   async asyncVerifier({ $axios, route }) {
+    console.log(route.query.access_token);
+    let result = {};
+    let protectedData = {};
+    if (route.query.access_token != null) {
+      await $axios
+        .get(
+          "/verifier-api/auth?access_token=" +
+            route.query.access_token
+        )
+        .then((response) => {
+          result = response.data;
+
+          console.log(response.data);
+          console.log(result.vp_token.verifiableCredential[0].type[2]);
+          return $axios.get("/verifier-api/protected", {
+            headers: {
+              Authorization: "Bearer " + result.auth_token,
+            },
+          });
+        })
+        .then((dataResponse) => {
+          protectedData = dataResponse.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+    
+    return { result, protectedData };
+  },
+
   methods: {
-    async enrollData(code, wallets, vidSchemaUri) {
+    async enrollData(wallets, vidSchemaUri) {
 
       window.location='/verifier-api/present/?walletId=' +
                   wallets[0].id +
                   '&schemaUri=' + vidSchemaUri;
+
+
+
     },
   },
 };
