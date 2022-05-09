@@ -128,6 +128,7 @@ export default {
     const wallets = await $axios.$get("/verifier-api/wallets/list");
     console.log(wallets);
 
+    if (route.query.access_token != null){
     let providedCredentials = await $axios
         .get(
           "/verifier-api/auth?access_token=" +
@@ -135,6 +136,7 @@ export default {
         );
 
     console.log(providedCredentials);
+    }
 
     return {modules, enrolledMod, wallets };
   },
