@@ -158,7 +158,9 @@ export default {
       let providedCredentials = await $axios.get(
         "/verifier-api/auth?access_token=" + route.query.access_token
       );
+      console.log(providedCredentials);
       if (route.query.result === "success") {
+
         let modTitle =
           providedCredentials.vp_token.verifiableCredential[0].credentialSubject
             .achieved[0].specifiedBy[0].title;
