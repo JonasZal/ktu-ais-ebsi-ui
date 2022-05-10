@@ -38,14 +38,15 @@
                   <b>Status:</b> {{ data.status }}
                   <br />
                   <i class="bi"></i>
-                  <b style="color:green;" v-if="data.description===modTitle">Enroll status: {{ enrollResult }}</b>
+                  <b style="color:green;" v-if="data.code===modCode">{{ enrollResult }}</b>
                 </span>
               </div>
               <div class="col-md-2 button">
                 <button
                   v-if="
                     (data.status === 'Open') &
-                    (data.code !== enrolledMod.data[0])
+                    (data.code !== enrolledMod.data[0]) &
+                    (modCode !== 'ECIU003' )
                   "
                   @click="enrollData(wallets, diplomaSchemaUri)"
                   type="button"
@@ -83,7 +84,7 @@
                   type="button"
                   class="buttonktu"
                 >
-                  Apply
+                  Enroll
                 </button>
 
               </div>
@@ -171,6 +172,7 @@ export default {
         console.log(modTitle);
         modCode = "ECIU003";
         enrollResult="Recieved module from microblock: " + modTitle + ", grade: " +modGrade;
+     
         
       } else if (route.query.result === "error") {
         enrollResult="Apply failed";
@@ -225,6 +227,8 @@ export default {
         "/ktu-ais-api/modules/enrol",
         "courseId=" + code
       );
+      window.location = "/modules";
+      
     },
   },
 };
