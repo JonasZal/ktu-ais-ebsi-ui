@@ -152,7 +152,11 @@ export default {
     const wallets = await $axios.$get("/verifier-api/wallets/list");
     console.log(wallets);
 
-
+    if(route.query.enroll === "success")
+    {
+      enrollResult="Enroll was successful";
+      modCode = "ECIU003";
+    }
 
 
     if (route.query.access_token != null) {
@@ -171,7 +175,7 @@ export default {
         console.log(modGrade);
         console.log(modTitle);
         modCode = "ECIU003";
-        enrollResult="Recieved module from microblock: " + modTitle + ", grade: " +modGrade;
+        enrollResult="Received micro credentials from Tampere university: " + modTitle + " (Grade: " +modGrade + ")";
      
         
       } else if (route.query.result === "error") {
@@ -227,8 +231,7 @@ export default {
         "/ktu-ais-api/modules/enrol",
         "courseId=" + code
       );
-      window.location = "/modules";
-      
+      window.location = "/modules?enroll=success";
     },
   },
 };
