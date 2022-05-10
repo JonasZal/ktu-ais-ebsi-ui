@@ -206,7 +206,6 @@ export default {
       console.log("Selected issuables:", selectedIssuables);
       console.log("sessionid : " + this.sessionId);
       console.log(this.sessionId);
-die();
       const params =
         this.sessionId != null
           ? { sessionId: this.sessionId }
