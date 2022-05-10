@@ -60,9 +60,9 @@ export default {
     // '/onboarding-api/': 'https://wallet.waltid.org',
     // '/api/': 'https://wallet.waltid.org'
     //'/issuer-api/': 'http://localhost:8080/',
-   // '/onboarding-api/': 'http://localhost:8080/',
+    //'/onboarding-api/': 'http://localhost:8080/',
     //'/api/': 'http://localhost:8080/',
-   // '/verifier-api/': 'http://localhost:8080/',
+    //'/verifier-api/': 'http://localhost:8080/',
     //'/ktu-ais-api/': 'http://localhost:8080/',
     '/issuer-api/': 'https://ktu-ais.mu.dltnode.eu/',
     '/onboarding-api/': 'https://ktu-ais.mu.dltnode.eu/',

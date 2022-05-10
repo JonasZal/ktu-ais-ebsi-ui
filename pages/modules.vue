@@ -6,9 +6,12 @@
       <section class="text-center container">
         <div class="row py-lg-5">
           <div class="row dashboard">
-            <p v-if="result !== ''">{{result}}</p>
             <div class="col-2">
-              <a href="/" class="buttonktu12" type="button" aria-expanded="false"
+              <a
+                href="/"
+                class="buttonktu12"
+                type="button"
+                aria-expanded="false"
                 >Dashboard
               </a>
             </div>
@@ -33,6 +36,9 @@
                   <br />
                   <i class="bi"></i>
                   <b>Status:</b> {{ data.status }}
+                  <br />
+                  <i class="bi"></i>
+                  <b style="color:green;" v-if="data.description===modTitle">Enroll status: {{ enrollResult }}</b>
                 </span>
               </div>
               <div class="col-md-2 button">
@@ -45,7 +51,7 @@
                   type="button"
                   class="buttonktu"
                 >
-                  Enroll
+                  Apply
                 </button>
                 <button
                   v-else-if="
@@ -56,7 +62,7 @@
                   class="buttonktu"
                   disabled
                 >
-                  Enroll
+                  Apply
                 </button>
                 <button
                   v-else-if="data.code === enrolledMod.data[0]"
@@ -66,6 +72,20 @@
                 >
                   Enrolled
                 </button>
+
+                <button
+                  v-if="
+                    (data.status === 'Open') &
+                    (data.code !== enrolledMod.data[0]) &
+                    (modCode === 'ECIU003' )
+                  "
+                  @click="enrollModule(modCode)"
+                  type="button"
+                  class="buttonktu"
+                >
+                  Apply
+                </button>
+
               </div>
             </div>
           </div>
@@ -88,24 +108,27 @@ export default {
       modules: "",
       route: "",
       enrolledMod: "",
-       diplomaSchemaUri:
+      diplomaSchemaUri:
         "https://raw.githubusercontent.com/walt-id/waltid-ssikit-vclib/master/src/test/resources/schemas/Europass.json",
-        wallets:"",
-        codeID:"",
-        result:'',
+      wallets: "",
+      codeID: "",
+      result: "",
     };
   },
-   /*async asyncDataVerifier({ $axios, route, codeID }) {
+  /*async asyncDataVerifier({ $axios, route, codeID }) {
     
 
     return { result, protectedData, codeID };
   },*/
 
- 
-  
-  async asyncData({ $axios, route}) {
+  async asyncData({ $axios, route }) {
 
+    
+    let modTitle="";
+    let enrollResult="";
     let modules = await $axios.get("/ktu-ais-api/modules/list");
+    let modCode = "";
+    let modGrade = "";
 
     let enrolledMod = await $axios.get("/ktu-ais-api/modules/listUserCourses");
 
@@ -128,29 +151,42 @@ export default {
     const wallets = await $axios.$get("/verifier-api/wallets/list");
     console.log(wallets);
 
-    if (route.query.access_token != null){
-    let providedCredentials = await $axios
-        .get(
-          "/verifier-api/auth?access_token=" +
-            route.query.access_token
-        );
 
-    console.log(providedCredentials);
+
+
+    if (route.query.access_token != null) {
+      let providedCredentials = await $axios.get(
+        "/verifier-api/auth?access_token=" + route.query.access_token
+      );
+      if (route.query.result === "success") {
+        let modTitle =
+          providedCredentials.vp_token.verifiableCredential[0].credentialSubject
+            .achieved[0].specifiedBy[0].title;
+        let modGrade =
+          providedCredentials.vp_token.verifiableCredential[0].credentialSubject
+            .achieved[0].wasDerivedFrom[0].grade;
+        console.log(modGrade);
+        console.log(modTitle);
+        modCode = "ECIU003";
+        enrollResult="Recieved module from microblock: " + modTitle + ", grade: " +modGrade;
+        
+      } else if (route.query.result === "error") {
+        enrollResult="Apply failed";
+      }
+      console.log(providedCredentials);
     }
+    console.log(modTitle);
 
-    return {modules, enrolledMod, wallets };
+    return { modules, enrolledMod, wallets, modTitle, enrollResult, modCode, modGrade };
   },
 
-   async asyncVerifier({ $axios, route }) {
+  /*async asyncVerifier({ $axios, route }) {
     console.log(route.query.access_token);
     let result = {};
     let protectedData = {};
     if (route.query.access_token != null) {
       await $axios
-        .get(
-          "/verifier-api/auth?access_token=" +
-            route.query.access_token
-        )
+        .get("/verifier-api/auth?access_token=" + route.query.access_token)
         .then((response) => {
           result = response.data;
 
@@ -170,19 +206,23 @@ export default {
         });
     }
 
-    
     return { result, protectedData };
-  },
+  },*/
 
   methods: {
     async enrollData(wallets, vidSchemaUri) {
+      window.location =
+        "/verifier-api/present/?walletId=" +
+        wallets[0].id +
+        "&schemaUri=" +
+        vidSchemaUri;
+    },
 
-      window.location='/verifier-api/present/?walletId=' +
-                  wallets[0].id +
-                  '&schemaUri=' + vidSchemaUri;
-
-
-
+    async enrollModule(code) {
+      let c = await this.$axios.post(
+        "/ktu-ais-api/modules/enrol",
+        "courseId=" + code
+      );
     },
   },
 };
@@ -190,7 +230,6 @@ export default {
 
 <style scoped>
 @import url("https://fonts.cdnfonts.com/css/pf-dintext-pro-medium");
-
 
 .buttonktu12:hover,
 .buttonktu12:focus {
@@ -217,7 +256,7 @@ export default {
   font-family: "PF DinText Pro Medium";
 }
 
-.mod{
+.mod {
   text-align: left;
 }
 .container {
