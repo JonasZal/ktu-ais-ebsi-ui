@@ -162,10 +162,10 @@ export default {
       if (route.query.result === "success") {
 
         let modTitle =
-          providedCredentials.vp_token.verifiableCredential[0].credentialSubject
+          providedCredentials.data.vp_token.verifiableCredential[0].credentialSubject
             .achieved[0].specifiedBy[0].title;
         let modGrade =
-          providedCredentials.vp_token.verifiableCredential[0].credentialSubject
+          providedCredentials.data.vp_token.verifiableCredential[0].credentialSubject
             .achieved[0].wasDerivedFrom[0].grade;
         console.log(modGrade);
         console.log(modTitle);
