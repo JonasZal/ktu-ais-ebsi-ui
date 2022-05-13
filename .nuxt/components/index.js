@@ -2,6 +2,7 @@ export { default as CredentialEditor } from '../..\\components\\CredentialEditor
 export { default as ErrorMessage } from '../..\\components\\ErrorMessage.vue'
 export { default as KTUfooter } from '../..\\components\\KTUfooter.vue'
 export { default as KTUheader } from '../..\\components\\KTUheader.vue'
+export { default as KTUheaderNoLogout } from '../..\\components\\KTUheaderNoLogout.vue'
 
 // nuxt/nuxt.js#8607
 function wrapFunctional(options) {

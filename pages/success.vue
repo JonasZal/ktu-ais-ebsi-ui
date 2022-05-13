@@ -463,7 +463,7 @@ if (window.opener != null) {
   window.opener.location = window.location;
   window.close();
 }
-import KTUheader from "../components/KTUheader.vue";
+import KTUheader from "../components/KTUheaderNoLogout.vue";
 import ErrorMessage from "@/components/ErrorMessage.vue";
 export default {
   auth: false,

@@ -44,7 +44,7 @@
                   '&schemaUri=' + vidSchemaUri
                 "
                 class="btn btn-success my-2 _btn buttonktu mainf _btnVerif"
-                >Register</a
+                >Register using EBSI</a
               >
     </main>
   </section>

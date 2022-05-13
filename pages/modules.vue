@@ -78,9 +78,9 @@
                   v-if="
                     (data.status === 'Open') &
                     (data.code !== enrolledMod.data[0]) &
-                    (modCode === 'ECIU003' )
+                    (modCode === 'ECIU003'   &  enrollResult !== 'error')
                   "
-                  @click="enrollModule(modCode)"
+                  @click="enrollModule(modCode, providedCredentials)"
                   type="button"
                   class="buttonktu"
                 >
@@ -114,6 +114,8 @@ export default {
       wallets: "",
       codeID: "",
       result: "",
+      didKeyStatus: "",
+      providedCredentials:"",
     };
   },
   /*async asyncDataVerifier({ $axios, route, codeID }) {
@@ -130,7 +132,8 @@ export default {
     let modules = await $axios.get("/ktu-ais-api/modules/list");
     let modCode = "";
     let modGrade = "";
-
+    let didKeyStatus = "";
+    let providedCredentials = "";
     let enrolledMod = await $axios.get("/ktu-ais-api/modules/listUserCourses");
 
     console.log(modules);
@@ -158,14 +161,21 @@ export default {
       modCode = "ECIU003";
     }
 
+    if(route.query.enroll === "failed")
+    {
+      enrollResult="error";
+      modCode = "ECIU003";
+    }
+
 
     if (route.query.access_token != null) {
-      let providedCredentials = await $axios.get(
+      providedCredentials = await $axios.get(
         "/verifier-api/auth?access_token=" + route.query.access_token
       );
       console.log(providedCredentials);
       if (route.query.result === "success") {
-
+        
+        console.log(didKeyStatus)
         let modTitle =
           providedCredentials.data.vp_token.verifiableCredential[0].credentialSubject
             .achieved[0].specifiedBy[0].title;
@@ -176,7 +186,9 @@ export default {
         console.log(modTitle);
         modCode = "ECIU003";
         enrollResult="Received micro credentials from Tampere university: " + modTitle + " (Grade: " +modGrade + ")";
-     
+
+        
+        
         
       } else if (route.query.result === "error") {
         enrollResult="Apply failed";
@@ -185,7 +197,7 @@ export default {
     }
     console.log(modTitle);
 
-    return { modules, enrolledMod, wallets, modTitle, enrollResult, modCode, modGrade };
+    return { modules, enrolledMod, wallets, modTitle, enrollResult, modCode, modGrade, providedCredentials };
   },
 
   /*async asyncVerifier({ $axios, route }) {
@@ -226,12 +238,35 @@ export default {
         vidSchemaUri;
     },
 
-    async enrollModule(code) {
-      let c = await this.$axios.post(
+    async enrollModule(code, providedCredentials) {
+      
+      
+        let didKeyStatus = this.getIssuerDid(providedCredentials);
+        console.log(didKeyStatus);
+
+        if(didKeyStatus.isAccredited == true)
+        {
+          let c = await this.$axios.post(
         "/ktu-ais-api/modules/enrol",
-        "courseId=" + code
+        "courseId=" + code);
+        
+        window.location = "/modules?enroll=success";
+        }
+        else if(didKeyStatus.isAccrediteds == false)
+        {
+          window.location = "/modules?enroll=failed";
+        }
+
+      
+    },
+
+    async getIssuerDid(providedCredentials) {
+      let didKeyStatus = await this.$axios.get(
+        "/ktu-ais-api/issuer/checkAccreditation?did=" +  providedCredentials.data.vp_token.verifiableCredential[0].credentialSubject
+            .issuer
       );
-      window.location = "/modules?enroll=success";
+      console.log(didKeyStatus);
+      return didKeyStatus;
     },
   },
 };

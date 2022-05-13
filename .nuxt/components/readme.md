@@ -10,3 +10,4 @@ You can directly use them in pages and other components without the need to impo
 - `<ErrorMessage>` | `<error-message>` (components/ErrorMessage.vue)
 - `<KTUfooter>` | `<k-t-ufooter>` (components/KTUfooter.vue)
 - `<KTUheader>` | `<k-t-uheader>` (components/KTUheader.vue)
+- `<KTUheaderNoLogout>` | `<k-t-uheader-no-logout>` (components/KTUheaderNoLogout.vue)

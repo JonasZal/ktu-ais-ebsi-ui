@@ -10,5 +10,8 @@
   },
   "KTUheader": {
     "description": "Auto imported from components/KTUheader.vue"
+  },
+  "KTUheaderNoLogout": {
+    "description": "Auto imported from components/KTUheaderNoLogout.vue"
   }
 }
