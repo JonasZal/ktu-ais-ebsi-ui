@@ -242,7 +242,7 @@ export default {
     async enrollModule(code, providedCredentials) {
       
       
-        let didKeyStatus = this.getIssuerDid(providedCredentials);
+        let didKeyStatus = await this.getIssuerDid(providedCredentials);
         console.log(didKeyStatus);
 
         if(didKeyStatus.data.isAccredited == true)
@@ -261,7 +261,7 @@ export default {
       
     },
 
-    async getIssuerDid(providedCredentials) {
+    getIssuerDid(providedCredentials) {
       console.log(providedCredentials.data.vp_token.verifiableCredential[0].issuer);
       let didKeyStatus = await this.$axios.get(
         "/ktu-ais-api/issuer/checkAccreditation?did=" +  providedCredentials.data.vp_token.verifiableCredential[0].issuer
