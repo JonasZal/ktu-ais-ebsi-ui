@@ -261,6 +261,8 @@ export default {
     },
 
     async getIssuerDid(providedCredentials) {
+      console.log(providedCredentials.data.vp_token.verifiableCredential[0].credentialSubject
+            .issuer);
       let didKeyStatus = await this.$axios.get(
         "/ktu-ais-api/issuer/checkAccreditation?did=" +  providedCredentials.data.vp_token.verifiableCredential[0].credentialSubject
             .issuer

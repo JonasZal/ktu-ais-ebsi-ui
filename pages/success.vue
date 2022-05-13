@@ -547,7 +547,7 @@ export default {
         "courseId=" + code
       );*/
     },
-
+    
     viewSessionToken() {
       this.access_token = this.result.auth_token;
     },
