@@ -245,7 +245,7 @@ export default {
         let didKeyStatus = this.getIssuerDid(providedCredentials);
         console.log(didKeyStatus);
 
-        if(didKeyStatus.isAccredited == true)
+        if(didKeyStatus.data.isAccredited == true)
         {
           let c = await this.$axios.post(
         "/ktu-ais-api/modules/enrol",
@@ -253,7 +253,7 @@ export default {
         
         window.location = "/modules?enroll=success";
         }
-        else if(didKeyStatus.isAccrediteds == false)
+        else if(didKeyStatus.data.isAccrediteds == false)
         {
           window.location = "/modules?enroll=failed";
         }
