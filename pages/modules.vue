@@ -35,7 +35,8 @@
                   <b>Module description:</b> {{ data.description }}
                   <br />
                   <i class="bi"></i>
-                  <b>Status:</b> {{ data.status }}
+                  <b v-if="data.status === 'Open'">Status:</b> Open, prerequisites missing 
+                  <b v-else>Status:</b>  {{ data.status }}
                   <br />
                   <i class="bi"></i>
                   <b style="color:green;" v-if="data.code===modCode">{{ enrollResult }}</b>
@@ -185,7 +186,7 @@ export default {
         console.log(modGrade);
         console.log(modTitle);
         modCode = "ECIU003";
-        enrollResult="Received micro credentials from Tampere university: " + modTitle + " (Grade: " +modGrade + ")";
+        enrollResult="Received micro credentials from Tampere university: " + modTitle + " (Grade: " +modGrade + ") satisfy the prerequisites";
 
         
         
@@ -261,11 +262,9 @@ export default {
     },
 
     async getIssuerDid(providedCredentials) {
-      console.log(providedCredentials.data.vp_token.verifiableCredential[0].credentialSubject
-            .issuer);
+      console.log(providedCredentials.data.vp_token.verifiableCredential[0].issuer);
       let didKeyStatus = await this.$axios.get(
-        "/ktu-ais-api/issuer/checkAccreditation?did=" +  providedCredentials.data.vp_token.verifiableCredential[0].credentialSubject
-            .issuer
+        "/ktu-ais-api/issuer/checkAccreditation?did=" +  providedCredentials.data.vp_token.verifiableCredential[0].issuer
       );
       console.log(didKeyStatus);
       return didKeyStatus;
