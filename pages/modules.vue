@@ -34,9 +34,15 @@
                   <i class="bi"></i>
                   <b>Module description:</b> {{ data.description }}
                   <br />
+                  <span v-if="data.status === 'Open'">
+                  <i class="bi"></i>
+                  <b>Status:</b>  {{ openStatus }}
+                  </span>
+                  <span v-else>
                   <i class="bi"></i>
                   <!--<b v-if="data.status === 'Open'">Status:</b> Open, prerequisites missing--> 
                   <b>Status:</b>  {{ data.status }}
+                  </span>
                   <br />
                   <i class="bi"></i>
                   <b style="color:green;" v-if="data.code===modCode">{{ enrollResult }}</b>
@@ -53,7 +59,7 @@
                   type="button"
                   class="buttonktu"
                 >
-                  Apply
+                  Apply with credential containing prerequisites
                 </button>
                 <button
                   v-else-if="
@@ -79,9 +85,22 @@
                   v-if="
                     (data.status === 'Open') &
                     (data.code !== enrolledMod.data[0]) &
-                    (modCode === 'ECIU003'   &  enrollResult !== 'error')
+                    (modCode === 'ECIU003') & verified === 'yes' & check !== 'on'
                   "
-                  @click="enrollModule(modCode, providedCredentials)"
+                  @click="getIssuerDid(providedCredentials)"
+                  type="button"
+                  class="buttonktu"
+                >
+                  Check
+                </button>
+
+                <button
+                  v-if="
+                    (data.status === 'Open') &
+                    (data.code !== enrolledMod.data[0]) &
+                    (modCode === 'ECIU003') &  check !== 'off'  &  check === 'on' & verified !== 'yes' 
+                  "
+                  @click="enrollModule(modCode)"
                   type="button"
                   class="buttonktu"
                 >
@@ -117,6 +136,7 @@ export default {
       result: "",
       didKeyStatus: "",
       providedCredentials:"",
+      openStatus: "Open, prerequisites missing",
     };
   },
   /*async asyncDataVerifier({ $axios, route, codeID }) {
@@ -136,6 +156,8 @@ export default {
     let didKeyStatus = "";
     let providedCredentials = "";
     let enrolledMod = await $axios.get("/ktu-ais-api/modules/listUserCourses");
+    let check = "";
+    let verified="";
 
     console.log(modules);
     console.log(route);
@@ -156,15 +178,24 @@ export default {
     const wallets = await $axios.$get("/verifier-api/wallets/list");
     console.log(wallets);
 
-    if(route.query.enroll === "success")
+    if(route.query.check === "success")
     {
-      enrollResult="Enroll was successful";
+      check="on";
+      enrollResult="You are accredited ! Now you can enroll in this module. Press 'Enroll' ";
       modCode = "ECIU003";
     }
 
-    if(route.query.enroll === "failed")
+    if(route.query.check === "failed")
     {
-      enrollResult="error";
+      check = "off";
+      enrollResult="You are NOT accredited!";
+      modCode = "ECIU003";
+    }
+
+    if(route.query.enroll === "success")
+    {
+      check="on";
+      enrollResult="You are enrolled successfully!";
       modCode = "ECIU003";
     }
 
@@ -186,7 +217,9 @@ export default {
         console.log(modGrade);
         console.log(modTitle);
         modCode = "ECIU003";
-        enrollResult="Received micro credentials from Tampere university: " + modTitle + " (Grade: " +modGrade + ") satisfy the prerequisites";
+        verified = "yes";
+        enrollResult="Received micro credentials from Tampere university: " + modTitle + " (Grade: " +modGrade + ") satisfy the prerequisites. Now you need to check if you are accredited to enroll in this module. Press 'Check'";
+
 
         
         
@@ -198,7 +231,7 @@ export default {
     }
     console.log(modTitle);
 
-    return { modules, enrolledMod, wallets, modTitle, enrollResult, modCode, modGrade, providedCredentials };
+    return { modules, enrolledMod, wallets, modTitle, enrollResult, modCode, modGrade, providedCredentials, check, verified };
   },
 
   /*async asyncVerifier({ $axios, route }) {
@@ -239,26 +272,12 @@ export default {
         vidSchemaUri;
     },
 
-    async enrollModule(code, providedCredentials) {
+    async enrollModule(code) {
       
-      
-        let didKeyStatus = await this.getIssuerDid(providedCredentials);
-        console.log(didKeyStatus);
-
-        if(didKeyStatus.data.isAccredited == true)
-        {
           let c = await this.$axios.post(
         "/ktu-ais-api/modules/enrol",
         "courseId=" + code);
-        
         window.location = "/modules?enroll=success";
-        }
-        else if(didKeyStatus.data.isAccrediteds == false)
-        {
-          window.location = "/modules?enroll=failed";
-        }
-
-      
     },
 
     async getIssuerDid(providedCredentials) {
@@ -267,7 +286,15 @@ export default {
         "/ktu-ais-api/issuer/checkAccreditation?did=" +  providedCredentials.data.vp_token.verifiableCredential[0].issuer
       );
       console.log(didKeyStatus);
-      return didKeyStatus;
+
+       if(didKeyStatus.data.isAccredited == true)
+        {
+        window.location = "/modules?check=success";
+        }
+        else if(didKeyStatus.data.isAccredited == false)
+        {
+          window.location = "/modules?check=failed";
+        }
     },
   },
 };
@@ -351,7 +378,8 @@ form {
 }
 
 .button {
-  padding-top: 10px;
+  padding-top: 0px;
+  top: 0;
 }
 .modulis {
   padding-left: 180px;
@@ -540,8 +568,8 @@ footer {
   background: transparent;
   float: none !important;
 
-  width: 80px;
-  height: 30px;
+  width: 200px;
+  height: auto;
   border-radius: 4px;
 
   font-size: 14px !important;
