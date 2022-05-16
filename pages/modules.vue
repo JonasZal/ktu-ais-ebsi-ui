@@ -45,7 +45,7 @@
                   </span>
                   <br />
                   <i class="bi"></i>
-                  <b style="color:green;" v-if="data.code===modCode">{{ enrollResult }}</b>
+                  <b style="color:green;" v-if="data.code===modCode" v-html="enrollResult">{{ enrollResult }}</b>
                 </span>
               </div>
               <div class="col-md-2 button">
@@ -82,7 +82,7 @@
                 </button>
 
                 <button
-                  v-if="
+                  v-else-if="
                     (data.status === 'Open') &
                     (data.code !== enrolledMod.data[0]) &
                     (modCode === 'ECIU003') 
@@ -136,7 +136,7 @@ export default {
 
     
     let modTitle="";
-    let enrollResult="";
+    var enrollResult="";
     let modules = await $axios.get("/ktu-ais-api/modules/list");
     let modCode = "";
     let modGrade = "";
@@ -191,7 +191,7 @@ export default {
             .achieved[0].wasDerivedFrom[0].grade;
         console.log(modGrade);
         console.log(modTitle);
-        modCode = "ECIU003";
+        
         verified = "yes";
 
        let didKeyStatus = await $axios.get(
@@ -202,12 +202,13 @@ export default {
 
        if(didKeyStatus.data.isAccredited == true)
         {
-           enrollResult="Received micro credentials from Tampere university: " + modTitle + " (Grade: " +modGrade + ") satisfy the prerequisites. Issuer name "+ didKeyStatus.data.organizationName +" accreditation check completed successfully. Congratulations! Now you can enroll to the selected module. Press 'Enroll'";
+          modCode = "ECIU003";
+           enrollResult="Received micro credentials from Tampere university: " + modTitle + " (Grade: " +modGrade + ") satisfy the prerequisites. Issuer name "+ didKeyStatus.data.organizationName +" accreditation check completed successfully. </br>Congratulations! Now you can enroll to the selected module. </br>Press 'Enroll'";
 
         }
         else if(didKeyStatus.data.isAccredited == false)
         {
-           enrollResult="Received micro credentials from Tampere university: " + modTitle + " (Grade: " +modGrade + ") satisfy the prerequisites. Issuer name "+ didKeyStatus.data.organizationName +" accreditation check failed. Congratulations! Now you can enroll to the selected module. Press 'Enroll'";
+           enrollResult="Received micro credentials from Tampere university: " + modTitle + " (Grade: " +modGrade + ") satisfy the prerequisites. Issuer name "+ didKeyStatus.data.organizationName +" accreditation check failed. Congratulations! </br>Now you can enroll to the selected module. </br>Press 'Enroll'";
         }
 
        
