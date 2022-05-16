@@ -194,7 +194,7 @@ export default {
         modCode = "ECIU003";
         verified = "yes";
 
-       let didKeyStatus = await this.$axios.get(
+       let didKeyStatus = await $axios.get(
         "/ktu-ais-api/issuer/checkAccreditation?did=" +  providedCredentials.data.vp_token.verifiableCredential[0].issuer
       );
       
