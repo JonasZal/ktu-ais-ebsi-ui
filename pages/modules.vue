@@ -59,7 +59,7 @@
                   type="button"
                   class="buttonktu"
                 >
-                  Apply with credential containing prerequisites
+                  Apply with credentials containing micro accreditation
                 </button>
                 <button
                   v-else-if="
@@ -79,19 +79,6 @@
                   disabled
                 >
                   Enrolled
-                </button>
-
-                <button
-                  v-if="
-                    (data.status === 'Open') &
-                    (data.code !== enrolledMod.data[0]) &
-                    (modCode === 'ECIU003') & verified === 'yes' & check !== 'on'
-                  "
-                  @click="getIssuerDid(providedCredentials)"
-                  type="button"
-                  class="buttonktu"
-                >
-                  Check
                 </button>
 
                 <button
@@ -218,7 +205,22 @@ export default {
         console.log(modTitle);
         modCode = "ECIU003";
         verified = "yes";
-        enrollResult="Received micro credentials from Tampere university: " + modTitle + " (Grade: " +modGrade + ") satisfy the prerequisites. Now you need to check if you are accredited to enroll in this module. Press 'Check'";
+
+       let didKeyStatus = getIssuerDid(providedCredentials);
+
+
+        
+       if(didKeyStatus.data.isAccredited == true)
+        {
+           enrollResult="Received micro credentials from Tampere university: " + modTitle + " (Grade: " +modGrade + ") satisfy the prerequisites. Issuer name "+ didKeyStatus.data.organizationName +" accreditation check completed successfully. Congratulations! Now you can enroll to the selected module. Press 'Enroll'";
+
+        }
+        else if(didKeyStatus.data.isAccredited == false)
+        {
+           enrollResult="Received micro credentials from Tampere university: " + modTitle + " (Grade: " +modGrade + ") satisfy the prerequisites. Issuer name "+ didKeyStatus.data.organizationName +" accreditation check failed. Congratulations! Now you can enroll to the selected module. Press 'Enroll'";
+        }
+
+       
 
 
         
@@ -287,14 +289,7 @@ export default {
       );
       console.log(didKeyStatus);
 
-       if(didKeyStatus.data.isAccredited == true)
-        {
-        window.location = "/modules?check=success";
-        }
-        else if(didKeyStatus.data.isAccredited == false)
-        {
-          window.location = "/modules?check=failed";
-        }
+        return didKeyStatus;
     },
   },
 };
