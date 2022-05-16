@@ -85,7 +85,7 @@
                   v-if="
                     (data.status === 'Open') &
                     (data.code !== enrolledMod.data[0]) &
-                    (modCode === 'ECIU003') &  check !== 'off'  &  check === 'on' & verified !== 'yes' 
+                    (modCode === 'ECIU003') 
                   "
                   @click="enrollModule(modCode)"
                   type="button"
@@ -165,19 +165,7 @@ export default {
     const wallets = await $axios.$get("/verifier-api/wallets/list");
     console.log(wallets);
 
-    if(route.query.check === "success")
-    {
-      check="on";
-      enrollResult="You are accredited ! Now you can enroll in this module. Press 'Enroll' ";
-      modCode = "ECIU003";
-    }
-
-    if(route.query.check === "failed")
-    {
-      check = "off";
-      enrollResult="You are NOT accredited!";
-      modCode = "ECIU003";
-    }
+   
 
     if(route.query.enroll === "success")
     {
@@ -206,10 +194,12 @@ export default {
         modCode = "ECIU003";
         verified = "yes";
 
-       let didKeyStatus = getIssuerDid(providedCredentials);
+       let didKeyStatus = await this.$axios.get(
+        "/ktu-ais-api/issuer/checkAccreditation?did=" +  providedCredentials.data.vp_token.verifiableCredential[0].issuer
+      );
+      
+      console.log(didKeyStatus);
 
-
-        
        if(didKeyStatus.data.isAccredited == true)
         {
            enrollResult="Received micro credentials from Tampere university: " + modTitle + " (Grade: " +modGrade + ") satisfy the prerequisites. Issuer name "+ didKeyStatus.data.organizationName +" accreditation check completed successfully. Congratulations! Now you can enroll to the selected module. Press 'Enroll'";
