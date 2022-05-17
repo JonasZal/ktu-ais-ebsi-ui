@@ -402,6 +402,7 @@ export default {
   },
 
   async asyncData({ $axios, route }) {
+    let enrollResult="";
     console.log(route.query.access_token);
     let result = {};
     let protectedData = {};
@@ -457,7 +458,8 @@ export default {
             enrollResult="</br><span style='color:green;'>Received Student ID :</span>"+
            "</br></br>"+
             
-           "<b style='color:green;'>Congratulations "+ name +" " +familyName +"! Welcome to KTU AIS system. Now you need to register. </br>Type password and Press 'Register'</b>"+
+           "<b style='color:green;'>Congratulations "+ result.vp_token.verifiableCredential[0].credentialSubject
+            .firstName; +" " +result.vp_token.verifiableCredential[0].credentialSubject.familyName +"! Welcome to KTU AIS system. Now you need to register. </br>Type password and Press 'Register'</b>"+
            "</br></br>"+
            "<div class='alert alert-success mt-4 table1'><span>Verifiable credentials EBSI verification policy check: <b style='color:green;'>"+ policyCheck +" </b></br></br>"+
            "EBSI trusted issuers registry check: </br>"+
