@@ -61,157 +61,8 @@
               </button>
             </form>
 
-            <div
-              class="accordion my-2"
-              id="accordion1"
-              v-for="data in result.vp_token.verifiableCredential"
-              v-bind:key="data.id"
-            >
-              <div class="accordion-item" style="border: none">
-                <h2
-                  class="accordion-header"
-                  :id="
-                    'heading' +
-                    result.vp_token.verifiableCredential.indexOf(data)
-                  "
-                >
-                  <button
-                    class="accordion-button collapsed border1"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    :data-bs-target="
-                      '#collapse' +
-                      result.vp_token.verifiableCredential.indexOf(data)
-                    "
-                    aria-expanded="false"
-                    :aria-controls="
-                      'collapse' +
-                      result.vp_token.verifiableCredential.indexOf(data)
-                    "
-                  >
-                    <i class="bi bi-check-circle-fill text-primary me-2"></i>
-                    {{ data.type[data.type.length - 1] }}
-                  </button>
-                </h2>
-                <div
-                  :id="
-                    'collapse' +
-                    result.vp_token.verifiableCredential.indexOf(data)
-                  "
-                  class="accordion-collapse collapse border2"
-                  :aria-labelledby="
-                    'heading' +
-                    result.vp_token.verifiableCredential.indexOf(data)
-                  "
-                  data-bs-parent="#accordionExample"
-                >
-                  <div class="accordion-body text-start">
-                    <!-- VerifiableId -->
-                    <div
-                      v-if="data.type[data.type.length - 1] == 'VerifiableId'"
-                    >
-                      <span>
-                        <i class="bi bi-check"></i>
-                        Family Name: {{ data.credentialSubject.familyName }}
-                      </span>
-                      <br />
-                      <span>
-                        <i class="bi bi-check"></i>
-                        First Name: {{ data.credentialSubject.firstName }}
-                      </span>
-                      <br />
-                      <span>
-                        <i class="bi bi-check"></i>
-                        Date Of Birth: {{ data.credentialSubject.dateOfBirth }}
-                      </span>
-                      <br />
-                      <span>
-                        <i class="bi bi-check"></i>
-                        Personal Identifier:
-                        {{ data.credentialSubject.personalIdentifier }}
-                      </span>
-                    </div>
-
-                    <!-- EuropeanBankIdentity -->
-                    <div
-                      v-if="
-                        data.type[data.type.length - 1] ==
-                        'EuropeanBankIdentity'
-                      "
-                    >
-                      <span>
-                        <i class="bi bi-check"></i>
-                        ID: {{ data.credentialSubject.id }}
-                      </span>
-                      <br />
-                      <span>
-                        <i class="bi bi-check"></i>
-                        Family name: {{ data.credentialSubject.familyName }}
-                      </span>
-                      <br />
-                      <span>
-                        <i class="bi bi-check"></i>
-                        Given names: {{ data.credentialSubject.givenName }}
-                      </span>
-                      <br />
-                      <span>
-                        <i class="bi bi-check"></i>
-                        Date of birth: {{ data.credentialSubject.birthDate }}
-                      </span>
-                      <br />
-                      <span>
-                        <i class="bi bi-check"></i>
-                        Country of birth:
-                        {{ data.credentialSubject.placeOfBirth.country }}
-                      </span>
-                      <br />
-                      <span>
-                        <i class="bi bi-check"></i>
-                        Locality of birth:
-                        {{ data.credentialSubject.placeOfBirth.locality }}
-                      </span>
-                    </div>
-
-                    <!-- VerifiableDiploma -->
-
-                    <div
-                      v-if="
-                        data.type[data.type.length - 1] == 'VerifiableDiploma'
-                      "
-                    >
-                      <span>
-                        <i class="bi bi-check"></i>
-                        ID: {{ data.credentialSubject.id }}
-                      </span>
-                      <br />
-                      <span>
-                        <i class="bi bi-check"></i>
-                        Family name: {{ data.credentialSubject.familyName }}
-                      </span>
-                      <br />
-                      <span>
-                        <i class="bi bi-check"></i>
-                        Given names: {{ data.credentialSubject.givenName }}
-                      </span>
-                      <br />
-                      <span>
-                        <i class="bi bi-check"></i>
-                        Date of birth: {{ data.credentialSubject.dateOfBirth }}
-                      </span>
-                      <br />
-                      <span>
-                        <i class="bi bi-check"></i>
-                        Education Name: {{ data.credentialSubject.identifier }}
-                      </span>
-                      <br />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              v-if="result.verification_result.valid"
-            >
+           
+            <div>
               {{enrollResult}}
             </div>
           
@@ -415,11 +266,28 @@ export default {
         .then((response) => {
           result = response.data;
 
-          console.log(response.data);
+         
+        })
+        .then((dataResponse) => {
+          protectedData = dataResponse.data;
+
+          return $axios.get("/verifier-api/protected", {
+            headers: {
+              Authorization: "Bearer " + result.auth_token,
+            },
+          });
+
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+    console.log(response.data);
           console.log(result.vp_token.verifiableCredential[0].type[2]);
 
 
-           let didKeyStatus = $axios.get(
+           let didKeyStatus = await $axios.get(
         "/ktu-ais-api/issuer/checkAccreditation?did=" +  result.vp_token.verifiableCredential[0].issuer
       );
 
@@ -455,7 +323,7 @@ export default {
         { 
           
        
-            enrollResult="</br><span style='color:green;'>Received Student ID :</span>"+
+            enrollResult="</br><span style='color:green;'>Received Student ID: "+ result.vp_token.verifiableCredential[0].personalIdentifier+"</span>"+
            "</br></br>"+
             
            "<b style='color:green;'>Congratulations "+ result.vp_token.verifiableCredential[0].credentialSubject
@@ -475,30 +343,6 @@ export default {
         {
            enrollResult="Received micro credentials from Tampere university: " + modTitle + " (Grade: " +modGrade + ") satisfy the prerequisites. Issuer name "+ didKeyStatus.data.organizationName +" accreditation check failed. Congratulations! </br>Now you can enroll to the selected module. </br>Press 'Enroll'";
         }
-
-
-
-
-
-
-
-
-          return $axios.get("/verifier-api/protected", {
-            headers: {
-              Authorization: "Bearer " + result.auth_token,
-            },
-          });
-        })
-        .then((dataResponse) => {
-          protectedData = dataResponse.data;
-
-         
-
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
 
     return { result, protectedData, enrollResult };
   },
