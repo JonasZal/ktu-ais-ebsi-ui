@@ -283,7 +283,6 @@ export default {
         });
     }
 
-    console.log(response.data);
           console.log(result.vp_token.verifiableCredential[0].type[2]);
 
 
@@ -323,7 +322,7 @@ export default {
         { 
           
        
-            enrollResult="</br><span style='color:green;'>Received Student ID: "+ result.vp_token.verifiableCredential[0].personalIdentifier+"</span>"+
+            enrollResult="</br><span style='color:green;'>Received Student ID: "+ result.vp_token.verifiableCredential[0].credentialSubject.personalIdentifier +"</span>"+
            "</br></br>"+
             
            "<b style='color:green;'>Congratulations "+ result.vp_token.verifiableCredential[0].credentialSubject
