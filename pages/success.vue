@@ -257,6 +257,8 @@ export default {
     console.log(route.query.access_token);
     let result = {};
     let protectedData = {};
+    let link = "";
+    let policyCheck="";
     if (route.query.access_token != null) {
       await $axios
         .get(
