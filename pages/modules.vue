@@ -4,6 +4,7 @@
 
     <main>
       <section class="text-center container">
+         
         <div class="row py-lg-5">
           <div class="row dashboard">
             <div class="col-2">
@@ -45,7 +46,9 @@
                   </span>
                   <br />
                   <i class="bi"></i>
-                  <b style="color:green;" v-if="data.code===modCode" v-html="enrollResult">{{ enrollResult }}</b>
+                  <span v-if="data.code===modCode" v-html="enrollResult">
+                  {{ enrollResult }}
+                  </span>
                 </span>
               </div>
               <div class="col-md-2 button">
@@ -108,6 +111,7 @@
 <script>
 import KTUheader from "../components/KTUheader.vue";
 import KTUfooter from "../components/KTUfooter.vue";
+import Preloader from './Preloader.vue'
 
 export default {
   name: "modules.vue",
@@ -145,6 +149,11 @@ export default {
     let enrolledMod = await $axios.get("/ktu-ais-api/modules/listUserCourses");
     let check = "";
     let verified="";
+    let challengePolicy="";
+    let signaturePolicy="";
+    let vpTokenClaimPolicy="";
+    let policyCheck="Passed";
+    let link ="";
 
     console.log(modules);
     console.log(route);
@@ -165,7 +174,15 @@ export default {
     const wallets = await $axios.$get("/verifier-api/wallets/list");
     console.log(wallets);
 
-   
+    let studentInfo = await $axios.get("/ktu-ais-api/student/getStudentData");
+    let name = studentInfo.data.name;
+    let familyName = studentInfo.data.familyName
+
+
+
+ 
+
+
 
     if(route.query.enroll === "success")
     {
@@ -200,10 +217,42 @@ export default {
       
       console.log(didKeyStatus);
 
+       if(didKeyStatus.data.accreditationInformationLocation!=="")
+  {
+    link= "<b style='color:green;'>Check completed successfully. Accreditation information can be found here: "+ didKeyStatus.data.accreditationInformationLocation  +"</b></br></br>";
+  }
+  else
+  {
+    link="</br></br>";
+  }
+
+          challengePolicy = providedCredentials.data.verification_result.policyResults.ChallengePolicy;
+          signaturePolicy = providedCredentials.data.verification_result.policyResults.SignaturePolicy;
+          vpTokenClaimPolicy = providedCredentials.data.verification_result.policyResults.VpTokenClaimPolicy;
+
+          if(challengePolicy==='true' && signaturePolicy==='true' && vpTokenClaimPolicy==='true')
+          {
+            policyCheck='Passed'
+          }
+          else{
+            policyCheck='Failed'
+          }
+
        if(didKeyStatus.data.isAccredited == true)
-        {
+        { 
+          
           modCode = "ECIU003";
-           enrollResult="Received micro credentials from Tampere university: " + modTitle + " (Grade: " +modGrade + ") satisfy the prerequisites. Issuer name "+ didKeyStatus.data.organizationName +" accreditation check completed successfully. </br>Congratulations! Now you can enroll to the selected module. </br>Press 'Enroll'";
+            enrollResult="<span style='color:green;'>Received micro credentials from Tampere university: " + modTitle + " (Grade: " +modGrade + ") satisfy the prerequisites.</span>"+
+           "</br></br>"+
+           "Verifiable credentials EBSI verification policy check: <b style='color:green;'>"+ policyCheck +" </b></br></br>"+
+           "EBSI trusted issuers registry check: </br>"+
+           "<ul "+ `style="list-style: '✓    ';"`+ ">"+
+           "<li>Issuer "+ didKeyStatus.data.organizationName  +" DID is registered in the <b style='color:green;'>EBSI TIR</b></li>"+
+            "<li>Issuer Accreditation data is present in <b style='color:green;'>EBSI TIR</b></li>"+
+            "<li>Issuer Accreditation data is provided by <b style='color:green;'>EBSI TIR EBSI Trusted Accreditation organization "+ didKeyStatus.data.accreditedBy +"</b></li>"+
+           "</ul>"+
+           link+
+           "<b style='color:green;'>Congratulations "+ name +" " +familyName +"! Now you can enroll to the selected module. </br>Press 'Enroll'";
 
         }
         else if(didKeyStatus.data.isAccredited == false)
@@ -256,6 +305,13 @@ export default {
     return { result, protectedData };
   },*/
 
+  components: {
+    Preloader,
+  },
+  props: {
+    msg: String
+  },
+
   methods: {
     async enrollData(wallets, vidSchemaUri) {
       window.location =
@@ -288,6 +344,10 @@ export default {
 
 <style scoped>
 @import url("https://fonts.cdnfonts.com/css/pf-dintext-pro-medium");
+
+ul{
+list-style: "✓";
+}
 
 .buttonktu12:hover,
 .buttonktu12:focus {
