@@ -180,10 +180,6 @@ export default {
 
 
 
- 
-
-
-
     if(route.query.enroll === "success")
     {
       check="on";
@@ -214,6 +210,8 @@ export default {
        let didKeyStatus = await $axios.get(
         "/ktu-ais-api/issuer/checkAccreditation?did=" +  providedCredentials.data.vp_token.verifiableCredential[0].issuer
       );
+
+
       
       console.log(didKeyStatus);
 
@@ -245,19 +243,19 @@ export default {
         { 
           
           modCode = "ECIU003";
-            enrollResult="</br></br><span style='color:green;'>Received micro credentials from Tampere university: " + modTitle + " (Grade: " +modGrade + ") satisfy the prerequisites.</span>"+
+            enrollResult="</br><span style='color:green;'>Received micro credentials from Tampere university: " + modTitle + " (Grade: " +modGrade + ") satisfy the prerequisites.</span>"+
            "</br></br>"+
-            +
-           "<b style='color:green;'>Congratulations "+ name +" " +familyName +"! Now you can enroll to the selected module. </br>Press 'Enroll'"+
+            
+           "<b style='color:green;'>Congratulations "+ name +" " +familyName +"! Now you can enroll to the selected module. </br>Press 'Enroll'</b>"+
            "</br></br>"+
-           "Verifiable credentials EBSI verification policy check: <b style='color:green;'>"+ policyCheck +" </b></br></br>"+
+           "<div class='alert alert-success mt-4 table1'><span>Verifiable credentials EBSI verification policy check: <b style='color:green;'>"+ policyCheck +" </b></br></br>"+
            "EBSI trusted issuers registry check: </br>"+
            "<ul "+ `style="list-style: '✓    ';"`+ ">"+
            "<li>Issuer "+ didKeyStatus.data.organizationName  +" DID is registered in the <b style='color:green;'>EBSI TIR</b></li>"+
             "<li>Issuer Accreditation data is present in <b style='color:green;'>EBSI TIR</b></li>"+
             "<li>Issuer Accreditation data is provided by <b style='color:green;'>EBSI TIR EBSI Trusted Accreditation organization "+ didKeyStatus.data.accreditedBy +"</b></li>"+
            "</ul>"+
-           link;
+           link+"</span></div>";
 
         }
         else if(didKeyStatus.data.isAccredited == false)
