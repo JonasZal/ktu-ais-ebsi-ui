@@ -63,7 +63,9 @@
 
            
             <div>
+              <span v-html="enrollResult">
               {{enrollResult}}
+              </span>
             </div>
           
           </div>
