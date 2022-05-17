@@ -219,7 +219,7 @@ export default {
 
        if(didKeyStatus.data.accreditationInformationLocation!=="")
   {
-    link= "<b style='color:green;'>Check completed successfully. Accreditation information can be found here: "+ didKeyStatus.data.accreditationInformationLocation  +"</b></br></br>";
+    link= "<b style='color:green;'>Check completed successfully. Accreditation information can be found here: <a href='"+ didKeyStatus.data.accreditationInformationLocation +"'>"+ didKeyStatus.data.accreditationInformationLocation  +"</a></b></br></br>";
   }
   else
   {
@@ -245,7 +245,10 @@ export default {
         { 
           
           modCode = "ECIU003";
-            enrollResult="<span style='color:green;'>Received micro credentials from Tampere university: " + modTitle + " (Grade: " +modGrade + ") satisfy the prerequisites.</span>"+
+            enrollResult="</br></br><span style='color:green;'>Received micro credentials from Tampere university: " + modTitle + " (Grade: " +modGrade + ") satisfy the prerequisites.</span>"+
+           "</br></br>"+
+            +
+           "<b style='color:green;'>Congratulations "+ name +" " +familyName +"! Now you can enroll to the selected module. </br>Press 'Enroll'"+
            "</br></br>"+
            "Verifiable credentials EBSI verification policy check: <b style='color:green;'>"+ policyCheck +" </b></br></br>"+
            "EBSI trusted issuers registry check: </br>"+
@@ -254,8 +257,7 @@ export default {
             "<li>Issuer Accreditation data is present in <b style='color:green;'>EBSI TIR</b></li>"+
             "<li>Issuer Accreditation data is provided by <b style='color:green;'>EBSI TIR EBSI Trusted Accreditation organization "+ didKeyStatus.data.accreditedBy +"</b></li>"+
            "</ul>"+
-           link+
-           "<b style='color:green;'>Congratulations "+ name +" " +familyName +"! Now you can enroll to the selected module. </br>Press 'Enroll'";
+           link;
 
         }
         else if(didKeyStatus.data.isAccredited == false)
