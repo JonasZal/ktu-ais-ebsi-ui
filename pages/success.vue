@@ -211,91 +211,10 @@
             </div>
             <div
               v-if="result.verification_result.valid"
-              class="alert alert-success mt-4 table1"
-              role="alert"
             >
-              <strong>The verification was successful</strong>
-              <br />
-              Verification Policies
-              <br />
-              {{
-                JSON.stringify(
-                  result.verification_result.policyResults,
-                  undefined,
-                  2
-                )
-              }}
+              {{enrollResult}}
             </div>
-            <div v-else class="alert alert-danger mt-4" role="alert">
-              <strong>The verification failed</strong>
-              <br />
-              Verification Policies
-              <br />
-              {{
-                JSON.stringify(
-                  result.verification_result.policyResults,
-                  undefined,
-                  2
-                )
-              }}
-            </div>
-            <div
-              v-if="result.verification_result.valid"
-              class="alert alert-secondary mt-4"
-              role="alert"
-            >
-              Authenticated session established
-              <br />
-              <span>
-                <i class="bi bi-dot"></i>
-                <a
-                  href="#"
-                  v-if="authenticatedDID === 'View authenticated DID'"
-                  class="text-dark"
-                  @click="viewAuthenticatedDID"
-                  >View authenticated DID</a
-                >
-                <a
-                  href="#"
-                  v-else
-                  class="text-dark"
-                  @click="viewAuthenticatedDID"
-                  >{{ authenticatedDID.slice(0, 30) }}...</a
-                >
-              </span>
-
-              <br />
-              <span>
-                <i class="bi bi-dot"></i>
-                <a
-                  href="#"
-                  v-if="access_token === 'View session token'"
-                  class="text-dark"
-                  @click="viewSessionToken"
-                  >View session token</a
-                >
-                <a href="#" v-else class="text-dark" @click="viewSessionToken"
-                  >{{ access_token.slice(0, 30) }}...</a
-                >
-              </span>
-            </div>
-            <div v-else class="alert alert-secondary mt-4" role="alert">
-              No authenticated session established!
-              <br />
-              <span>
-                <i class="bi bi-dot"></i>
-                <a href="#" class="text-dark" @click="viewAuthenticatedDID"
-                  >No authenticated DID</a
-                >
-              </span>
-              <br />
-              <span>
-                <i class="bi bi-dot"></i>
-                <a href="#" class="text-dark" @click="viewSessionToken"
-                  >No session token</a
-                >
-              </span>
-            </div>
+          
           </div>
           <div v-else-if="result.vp_token.verifiableCredential[0].type[2]==='Europass'" class="col-lg-4 col-md-6 mx-auto mainf">
             <!--<p>{{result.vp_token.verifiableCredential[0]}}</p>-->
@@ -497,6 +416,71 @@ export default {
 
           console.log(response.data);
           console.log(result.vp_token.verifiableCredential[0].type[2]);
+
+
+           let didKeyStatus = $axios.get(
+        "/ktu-ais-api/issuer/checkAccreditation?did=" +  result.vp_token.verifiableCredential[0].issuer
+      );
+
+
+      
+      console.log(didKeyStatus);
+
+       if(didKeyStatus.data.accreditationInformationLocation!=="")
+  {
+    link= "<b style='color:green;'>Check completed successfully. Accreditation information can be found here: <a href='"+ didKeyStatus.data.accreditationInformationLocation +"'>"+ didKeyStatus.data.accreditationInformationLocation  +"</a></b></br></br>";
+  }
+  else
+  {
+    link="</br></br>";
+  }
+
+          challengePolicy = result.verification_result.policyResults.ChallengePolicy;
+          signaturePolicy = result.verification_result.policyResults.SignaturePolicy;
+          vpTokenClaimPolicy = result.verification_result.policyResults.VpTokenClaimPolicy;
+          console.log(challengePolicy);
+          console.log(signaturePolicy);
+          console.log(vpTokenClaimPolicy);
+
+          if(challengePolicy===true & signaturePolicy===true & vpTokenClaimPolicy===true)
+          {
+            policyCheck='Passed'
+          }
+          else{
+            policyCheck='Failed'
+          }
+
+       if(didKeyStatus.data.isAccredited == true)
+        { 
+          
+       
+            enrollResult="</br><span style='color:green;'>Received Student ID :</span>"+
+           "</br></br>"+
+            
+           "<b style='color:green;'>Congratulations "+ name +" " +familyName +"! Welcome to KTU AIS system. Now you need to register. </br>Type password and Press 'Register'</b>"+
+           "</br></br>"+
+           "<div class='alert alert-success mt-4 table1'><span>Verifiable credentials EBSI verification policy check: <b style='color:green;'>"+ policyCheck +" </b></br></br>"+
+           "EBSI trusted issuers registry check: </br>"+
+           "<ul "+ `style="list-style: '✓    ';"`+ ">"+
+           "<li>Issuer "+ didKeyStatus.data.organizationName  +" DID is registered in the <b style='color:green;'>EBSI TIR</b></li>"+
+            "<li>Issuer Accreditation data is present in <b style='color:green;'>EBSI TIR</b></li>"+
+            "<li>Issuer Accreditation data is provided by <b style='color:green;'>EBSI TIR EBSI Trusted Accreditation organization "+ didKeyStatus.data.accreditedBy +"</b></li>"+
+           "</ul>"+
+           link+"</span></div>";
+
+        }
+        else if(didKeyStatus.data.isAccredited == false)
+        {
+           enrollResult="Received micro credentials from Tampere university: " + modTitle + " (Grade: " +modGrade + ") satisfy the prerequisites. Issuer name "+ didKeyStatus.data.organizationName +" accreditation check failed. Congratulations! </br>Now you can enroll to the selected module. </br>Press 'Enroll'";
+        }
+
+
+
+
+
+
+
+
           return $axios.get("/verifier-api/protected", {
             headers: {
               Authorization: "Bearer " + result.auth_token,
@@ -505,13 +489,16 @@ export default {
         })
         .then((dataResponse) => {
           protectedData = dataResponse.data;
+
+         
+
         })
         .catch((error) => {
           console.log(error);
         });
     }
 
-    return { result, protectedData };
+    return { result, protectedData, enrollResult };
   },
 
   methods: {
