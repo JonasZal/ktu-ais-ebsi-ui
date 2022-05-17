@@ -273,6 +273,7 @@ export default {
         )
         .then((response) => {
           result = response.data;
+          console.log(result);
 
          
         })
@@ -332,9 +333,8 @@ export default {
        
             enrollResult="</br><span style='color:green;'>Received Student ID: "+ result.vp_token.verifiableCredential[0].credentialSubject.personalIdentifier +"</span>"+
            "</br></br>"+
-            
            "<b style='color:green;'>Congratulations "+ result.vp_token.verifiableCredential[0].credentialSubject
-            .firstName; +" " +result.vp_token.verifiableCredential[0].credentialSubject.familyName +"! Welcome to KTU AIS system. Now you need to register. </br>Type password and Press 'Register'</b>"+
+            .firstName; +" " + result.vp_token.verifiableCredential[0].credentialSubject.familyName +"! Welcome to KTU AIS system. Now you need to register. </br>Type password and Press 'Register'</b>"+
            "</br></br>"+
            "<div class='alert alert-success mt-4 table1'><span>Verifiable credentials EBSI verification policy check: <b style='color:green;'>"+ policyCheck +" </b></br></br>"+
            "EBSI trusted issuers registry check: </br>"+
@@ -344,6 +344,7 @@ export default {
             "<li>Issuer Accreditation data is provided by <b style='color:green;'>EBSI TIR EBSI Trusted Accreditation organization "+ didKeyStatus.data.accreditedBy +"</b></li>"+
            "</ul>"+
            link+"</span></div>";
+           console.log(enrollResult);
 
         }
         else if(didKeyStatus.data.isAccredited == false)
