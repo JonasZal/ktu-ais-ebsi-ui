@@ -229,8 +229,11 @@ export default {
           challengePolicy = providedCredentials.data.verification_result.policyResults.ChallengePolicy;
           signaturePolicy = providedCredentials.data.verification_result.policyResults.SignaturePolicy;
           vpTokenClaimPolicy = providedCredentials.data.verification_result.policyResults.VpTokenClaimPolicy;
+          console.log(challengePolicy);
+          console.log(signaturePolicy);
+          console.log(vpTokenClaimPolicy);
 
-          if(challengePolicy==='true' && signaturePolicy==='true' && vpTokenClaimPolicy==='true')
+          if(challengePolicy===true & signaturePolicy===true & vpTokenClaimPolicy===true)
           {
             policyCheck='Passed'
           }
