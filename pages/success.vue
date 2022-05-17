@@ -259,6 +259,10 @@ export default {
     let protectedData = {};
     let link = "";
     let policyCheck="";
+    let challengePolicy ="";
+    let signaturePolicy ="";
+    let vpTokenClaimPolicy ="";
+
     if (route.query.access_token != null) {
       await $axios
         .get(
