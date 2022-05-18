@@ -256,6 +256,7 @@ export default {
             "<li>Issuer Accreditation data is provided by <b style='color:green;'>EBSI TIR EBSI Trusted Accreditation organization "+ didKeyStatus.data.accreditedBy +"</b></li>"+
            "</ul>"+
            link+"</span></div>";
+           openStatus="Prerequisites satisfied";
 
         }
         else if(didKeyStatus.data.isAccredited == false)
