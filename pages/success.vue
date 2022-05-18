@@ -71,7 +71,7 @@
           </div>
         </div>
         <div class="row py-lg-5">
-           <div class="success-table">
+           <div class="success-table col-lg-4 col-md-6 mx-auto mainf">
               <span v-html="enrollResult">
               {{enrollResult}}
               </span>
