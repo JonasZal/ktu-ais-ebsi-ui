@@ -127,7 +127,7 @@ export default {
       result: "",
       didKeyStatus: "",
       providedCredentials:"",
-      openStatus: "Open, prerequisites missing",
+      openStatus: "",
     };
   },
   /*async asyncDataVerifier({ $axios, route, codeID }) {
@@ -154,6 +154,7 @@ export default {
     let vpTokenClaimPolicy="";
     let policyCheck="Passed";
     let link ="";
+    let openStatus="Open, prerequisites missing";
 
     console.log(modules);
     console.log(route);
@@ -277,7 +278,7 @@ export default {
     }
     console.log(modTitle);
 
-    return { modules, enrolledMod, wallets, modTitle, enrollResult, modCode, modGrade, providedCredentials, check, verified };
+    return { modules, enrolledMod, wallets, modTitle, enrollResult, modCode, modGrade, providedCredentials, check, verified, openStatus };
   },
 
   /*async asyncVerifier({ $axios, route }) {
