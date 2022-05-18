@@ -4,7 +4,7 @@
 
     <main class="_home d-flex justify-content-centr">
       <section class="container">
-        <div class="row py-lg-5">
+        <div class="row first">
           <div v-if="result.vp_token.verifiableCredential[0].type[2]==='VerifiableId'" class="text-center col-lg-4 col-md-6 mx-auto mainf">
             <h2 class="fw-bold mb-2 pad">Welcome</h2>
 
@@ -70,8 +70,8 @@
             <p>success</p>
           </div>
         </div>
-        <div class="row py-lg-5">
-           <div class="success-table col-lg-4 col-md-6 mx-auto mainf">
+        <div class="row">
+           <div class="success-table mx-auto mainf">
               <span v-html="enrollResult">
               {{enrollResult}}
               </span>
@@ -334,11 +334,11 @@ export default {
         { 
           
        
-            enrollResult="</br><span style='color:green;'>Received Student ID: "+ result.vp_token.verifiableCredential[0].credentialSubject.personalIdentifier +"</span>"+
+            enrollResult="</br><div class='text-center'><span style='color:green;'>Received Student ID: "+ result.vp_token.verifiableCredential[0].credentialSubject.personalIdentifier +"</span>"+
            "</br></br>"+
            "<b style='color:green;'>Congratulations "+ result.vp_token.verifiableCredential[0].credentialSubject
             .firstName +" " + result.vp_token.verifiableCredential[0].credentialSubject.familyName +"! Welcome to KTU AIS system. Now you need to register. </br>Type password and Press 'Register'</b>"+
-           "</br></br>"+
+           "</div></br></br>"+
            "<div class='alert alert-success mt-4 table1'><span>Verifiable credentials EBSI verification policy check: <b style='color:green;'>"+ policyCheck +" </b></br></br>"+
            "EBSI trusted issuers registry check: </br>"+
            "<ul "+ `style="list-style: '✓    ';"`+ ">"+
@@ -439,6 +439,9 @@ export default {
 <style scoped>
 @import url("https://fonts.cdnfonts.com/css/pf-dintext-pro-medium");
 
+.first{
+  padding-top: 48px;
+}
 .success-table{
   width: 500px;
   text-align: left;
