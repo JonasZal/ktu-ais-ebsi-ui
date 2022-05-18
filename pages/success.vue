@@ -5,7 +5,7 @@
     <main class="_home d-flex justify-content-centr">
       <section class="container">
         <div class="row py-lg-5">
-          <div v-if="result.vp_token.verifiableCredential[0].type[2]==='VerifiableId'" class="text-center col-lg-4 col-md-6 mx-auto mainf">
+          <div v-if="result.vp_token.verifiableCredential[0].type[2]==='VerifiableId'" class="row text-center col-lg-4 col-md-6 mx-auto mainf">
             <h2 class="fw-bold mb-2 pad">Welcome</h2>
 
             <form
@@ -69,7 +69,7 @@
             <!--<p>{{result.vp_token.verifiableCredential[0]}}</p>-->
             <p>success</p>
           </div>
-           <div class="success-table">
+           <div class="row success-table">
               <span v-html="enrollResult">
               {{enrollResult}}
               </span>
@@ -438,7 +438,7 @@ export default {
 @import url("https://fonts.cdnfonts.com/css/pf-dintext-pro-medium");
 
 .success-table{
-  width: 500;
+  width: 500px;
   text-align: left;
 }
 main {
