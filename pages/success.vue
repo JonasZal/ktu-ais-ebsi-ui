@@ -5,7 +5,7 @@
     <main class="_home d-flex justify-content-centr">
       <section class="container">
         <div class="row py-lg-5">
-          <div v-if="result.vp_token.verifiableCredential[0].type[2]==='VerifiableId'" class="row text-center col-lg-4 col-md-6 mx-auto mainf">
+          <div v-if="result.vp_token.verifiableCredential[0].type[2]==='VerifiableId'" class="text-center col-lg-4 col-md-6 mx-auto mainf">
             <h2 class="fw-bold mb-2 pad">Welcome</h2>
 
             <form
@@ -69,7 +69,9 @@
             <!--<p>{{result.vp_token.verifiableCredential[0]}}</p>-->
             <p>success</p>
           </div>
-           <div class="row success-table">
+        </div>
+        <div class="row py-lg-5">
+           <div class="success-table">
               <span v-html="enrollResult">
               {{enrollResult}}
               </span>
@@ -701,7 +703,7 @@ label {
   padding-bottom: 20px;
 }
 .padding-form {
-  padding-bottom: 40px;
+  padding-bottom: 10px;
 }
 ._home {
   padding-top: 50px;
