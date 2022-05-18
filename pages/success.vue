@@ -62,17 +62,18 @@
             </form>
 
            
-            <div>
-              <span v-html="enrollResult">
-              {{enrollResult}}
-              </span>
-            </div>
+           
           
           </div>
           <div v-else-if="result.vp_token.verifiableCredential[0].type[2]==='Europass'" class="col-lg-4 col-md-6 mx-auto mainf">
             <!--<p>{{result.vp_token.verifiableCredential[0]}}</p>-->
             <p>success</p>
           </div>
+           <div>
+              <span v-html="enrollResult">
+              {{enrollResult}}
+              </span>
+            </div>
         </div>
       </section>
     </main>
@@ -695,7 +696,7 @@ label {
   padding-bottom: 20px;
 }
 .padding-form {
-  padding-bottom: 80px;
+  padding-bottom: 40px;
 }
 ._home {
   padding-top: 50px;
